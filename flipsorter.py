@@ -8,7 +8,7 @@ Leander de Kraker
 import matplotlib.pyplot as plt
 
 geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9]
-# geneOrigin = [5, 3, 1, 4, 6, 7, 2, 9, 8, 10, 11] # test Genenome that has to change to a sorted array
+geneOrigin = [1,3, 2, 6, 7, 4, 5] # test Genenome that has to change to a sorted array
 gene = geneOrigin
 genes = []
 solution = range(1, len(gene)+1) # Genome of Miranda
