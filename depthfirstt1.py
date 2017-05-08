@@ -1,17 +1,17 @@
 """
-First depth first search algorithm to find a agalwkng
+First depth first search algorithm to find a mutation sequence that turns one 'genome' into another
 Leander
 Nina
 
-2017-5-2
+started: 2017-5-2
 """
 
-geneOrigin = [4,3,2,1]
-# geneOrigin = [9, 8, 3 1, 6, 7, 2, 4, 5] # test Genenome that has to change to a sorted array
+# geneOrigin = [4,3,2,1]
+geneOrigin = [9, 8, 3, 1, 6, 7, 2, 4, 5] # test Genenome that has to change to a sorted array
 geneLength = len(geneOrigin)
 genes = []
 genes.append(geneOrigin)
-solution = [1,2,3,4]
+solution = [1,2,3,4,5,6,7,8,9]
 
 mutationTrack = [-1] # This keeps track of how many mutations have been tried for a child
 
@@ -28,13 +28,13 @@ while maxlength > 0:
         mutEnd.append(k + j + 1)
     k += 1
     maxlength -= 1
-mutMax = len(mutLength) # All
+mutMax = len(mutLength) # Number of possible mutations
 
 # Depth first search
 archive = dict()
 archive["".join(str(x) for x in geneOrigin)] = True
 Go = True
-maxDepth = 2
+maxDepth = 6
 doubleCounter = 0
 
 
@@ -72,13 +72,12 @@ while Go:
     # stap 3: Controleren of het unieke kinnderen zijn
     key = "".join(str(x) for x in child)
     if archive.get(key, False)!= False: # Key in the archive
-        #print("gene {} found in archive already".format(child))
         doubleCounter += 1
         print("non-unique value encountered for #{} time".format(doubleCounter))
         continue
 
 
-    # Stap 4 (voor later): Kinderen die stap 4 overleeft hebben toevoegen aan archief
+    # Stap 4: Kinderen die stap 4 overleeft hebben toevoegen aan archief
     archive[key] = True
 
 
@@ -99,7 +98,7 @@ print('final amount of double found sequences: {}'.format(doubleCounter))
 print("\ni,   start,  length, ending")
 for i in range(len(mutStart)):
     print("[{0:<2}]: {1:<7} : {2:<7} : {3:<7}".format(i, mutStart[i]+1, mutLength[i], mutEnd[i]))
-print("number of possible mutations = {}\n".format(len(mutLength)))
+print("number of possible mutations = {}\n".format(mutMax))
 
 for gene in genes:
     print(gene)
