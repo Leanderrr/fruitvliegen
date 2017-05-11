@@ -6,11 +6,7 @@ and looking for ways to improve the code
 Leander
 """
 import numpy as np
-import time
 
-
-# We are timing this code!
-tstart = time.time()
 # Our genome!
 Gen1 = np.array([23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9])
 
@@ -38,7 +34,3 @@ archive[key] = True
 print(archive.get(key,False))
 archive[key] = 2
 print(archive.get(key,False))
-
-time.sleep(0.2525)
-timed = time.time() - tstart
-print("execution duration = {}".format(timed))
