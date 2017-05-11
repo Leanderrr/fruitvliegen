@@ -1,5 +1,5 @@
 """
-First depth first search algorithm to find a mutation sequence that turns one 'genome' into another
+First breadth first search algorithm to find a mutation sequence that turns one 'genome' into another
 Leander
 Nina
 
@@ -7,13 +7,14 @@ started: 2017-5-2
 """
 from mutations import mutationlist
 
+
 # geneOrigin = [4,3,2,1]
 geneOrigin = [3,5,1,7,8,2,4,6] # test Genome that has to change to a sorted array
-geneOrigin = [11, 6, 1, 2, 10, 7, 5, 8, 12, 3, 4, 9]
+geneOrigin = [11, 6, 1, 2, 10, 7, 5, 8, 12, 13, 14, 15, 16, 17, 3, 4, 9]
 geneLength = len(geneOrigin)
 genes = []
 genes.append(geneOrigin)
-solution = [1,2,3,4,5,6,7,8,9,10,11,12]
+solution = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
 
 mutationTrack = [-1] # This keeps track of how many mutations have been tried for a child
 
@@ -24,7 +25,7 @@ mut = mutationlist(geneLength)
 archive = dict()
 archive["".join(str(x) for x in geneOrigin)] = True
 Go = True
-maxDepth = 6
+maxDepth = 8
 doubleCounter = 0
 
 while Go:
