@@ -33,11 +33,26 @@ print("2<False:    {}\n".format(2<False))
 # searching in a dictionary
 archive = dict()
 key = "1234567890"
-print(archive.get(key,False))
+print('archive.get(key,False): {}'.format(archive.get(key,False)))
 archive[key] = True
-print(archive.get(key,False))
-archive[key] = 2
-print(archive.get(key,False))
+print('archive.get(key,False): {}'.format(archive.get(key,False)))
+archive[key] = 23
+print('archive.get(key,False): {}'.format(archive.get(key,False)))
+print('archive len = {}'.format(len(archive)))
+archive["alsfjasldfj"] = 124
+archive["alsfjasldfj"] = 125
+archive["12345139051012"] = True
+print('archive len = {}'.format(len(archive)))
+
+flips = [[1,2], [3,4,], [5,6]]
+print("len(flips): {}".format(len(flips)))
+
+genelength = 10
+array = []
+for i in range(1,genelength+1):
+    array.append(i)
+
+print(array)
 
 time.sleep(0.2525)
 timed = time.time() - tstart
