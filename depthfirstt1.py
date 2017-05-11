@@ -6,14 +6,15 @@ Nina
 started: 2017-5-2
 """
 from mutations import mutationlist
+import time
 
 # geneOrigin = [4,3,2,1]
 geneOrigin = [3,5,1,7,8,2,4,6] # test Genome that has to change to a sorted array
-geneOrigin = [11, 6, 1, 2, 10, 7, 5, 8, 12, 3, 4, 9]
+geneOrigin = [6, 1, 2, 7, 8, 11, 5, 10, 3, 4, 9]
 geneLength = len(geneOrigin)
 genes = []
 genes.append(geneOrigin)
-solution = [1,2,3,4,5,6,7,8,9,10,11,12]
+solution = [1,2,3,4,5,6,7,8,9,10,11]
 
 mutationTrack = [-1] # This keeps track of how many mutations have been tried for a child
 
@@ -24,9 +25,9 @@ mut = mutationlist(geneLength)
 archive = dict()
 archive["".join(str(x) for x in geneOrigin)] = True
 Go = True
-maxDepth = 6
+maxDepth = 5
 doubleCounter = 0
-
+tstart = time.time()
 while Go:
     # stap 1: Kinderen maken
     child = genes[-1][:]
@@ -60,9 +61,8 @@ while Go:
 
     # stap 3: Controleren of het unieke kinnderen zijn
     elif (archive.get(key, False) != False) and (len(mutationTrack) > archive.get(key,100)): # Child already found
-        # doubleCounter += 1
+        doubleCounter += 1
         # print("non-unique value encountered for #{} time".format(doubleCounter))
-        print("mutationtracker: {}".format(mutationTrack))
 
     else:
         archive[key] = len(mutationTrack)
@@ -78,6 +78,9 @@ while Go:
             genes.append(child[:])
             mutationTrack.append(-1)
 
+tduration = time.time() - tstart
+print("program took {} seconds to find solution".format(tduration))
+
 print('final amount of double found sequences: {}'.format(doubleCounter))
 #print("archive:\n")
 #print(archive)
@@ -86,6 +89,10 @@ for i in range(len(mut.start)):
     print("[{0:<2}]: {1:<7} : {2:<7} : {3:<7}".format(i, mut.start[i]+1, mut.length[i], mut.end[i]))
 print("number of possible mutations = {}\n".format(mut.max))
 
+i = 0
 for gene in genes:
-    print(gene)
+    print("{} {}".format(i, gene))
+    i += 1
+
 print("final mutation tracker: {}".format(mutationTrack))
+print("program took {} seconds to find solution".format(tduration))
