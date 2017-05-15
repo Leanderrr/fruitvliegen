@@ -7,16 +7,16 @@ import flipsorter
 import random
 
 
-testgenome = [1,2,3,4,5,6,7,8,9,10,11,12]
-nTests = 10
-printer = False
+testgenome = [1,2,3,4,5,6,7,8,9,10]
+nTests = 1
+printer = True
 plot = False
-maxdepthDesire = 5
+maxdepthDesire = 6
 
 # Test the programs nTest times with randomized sequences
 for test in range(nTests):
     random.shuffle(testgenome)  # Randomize gene sequence
-    # testgenome = [3, 5, 1, 6, 4, 2]
+    # testgenome = [3, 5, 1, 6, 7, 8, 9, 10, 4, 2]
 
     print("\n\ntest: {}".format(test + 1))
     print("genome to convert: {}".format(testgenome))

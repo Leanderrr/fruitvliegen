@@ -7,12 +7,12 @@ Nina
 
 started: 2017-5-2
 """
+from mutations import mutationlist
+from depthfirst import new_branch
+import time
 
-def main(geneOrigin =  [4,3,2,1], maxDepth = 4, printer = True):
-    from mutations import mutationlist
-    import time
 
-    # geneOrigin = [4,3,2,1]
+def main(geneOrigin =  [3, 5, 1, 6, 7, 8, 4, 2], maxDepth = 4, printer = True):
     geneLength = len(geneOrigin)
     genes = []
     genes.append(geneOrigin)
@@ -39,14 +39,15 @@ def main(geneOrigin =  [4,3,2,1], maxDepth = 4, printer = True):
         # print("\n {}".format(genes))
         mutation = mutationTrack.pop() + 1
 
+        if len(genes) >= maxDepth:
+            # Stoppen met tak als ie te diep wordt
+            # print("pruned because of branch depth > {}".format(maxDepth))
+            child, mutation = new_branch(genes, mutationTrack)
+
         while (mutation >= mut.max):
             # print("pruned because all mutation of this node have been tried {}".format(mutation))
             # Go up one level and continue with the other mutation
-            genes.pop()
-            child = genes[-1][:]
-            mutation = mutationTrack.pop() + 1
-
-            # print("going to do mutation {}".format(mutation))
+            child, mutation = new_branch(genes, mutationTrack)
 
         mutationTrack.append(mutation)  # mutation  kept track of
 
@@ -73,16 +74,9 @@ def main(geneOrigin =  [4,3,2,1], maxDepth = 4, printer = True):
         else:
             archive[key] = len(mutationTrack)
 
-            if len(genes) >= maxDepth:
-                # Stoppen met tak als ie te diep wordt
-                genes.pop()
-                mutationTrack.pop()
-                # print("pruned because of branch depth > {}".format(maxDepth))
-
-            else:
-                # Stap 7: Kinderen toevoegen aan stack, ze gaan ouders worden! Stap1
-                genes.append(child[:])
-                mutationTrack.append(-1)
+            # Stap 7: Kinderen toevoegen aan stack, ze gaan ouders worden! Stap1
+            genes.append(child[:])
+            mutationTrack.append(-1)
 
     tduration = time.time() - tstart
 

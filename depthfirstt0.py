@@ -7,13 +7,11 @@ Nina
 
 started: 2017-5-2
 """
+from mutations import mutationlist
+from depthfirst import new_branch
+import time
 
-def main(geneOrigin =  [4,3,2,1], maxDepth = 4, printer = True):
-
-    from mutations import mutationlist
-    import time
-
-    # geneOrigin = [4,3,2,1]
+def main(geneOrigin = [5, 2, 7, 6, 8, 1, 4, 3], maxDepth = 5, printer = True):
     geneLength = len(geneOrigin)
     genes = []
     genes.append(geneOrigin)
@@ -35,21 +33,23 @@ def main(geneOrigin =  [4,3,2,1], maxDepth = 4, printer = True):
     while Go:
         # stap 1: Kinderen maken
         child = genes[-1][:]
-        #print("\n {}".format(genes))
         mutation = mutationTrack.pop() + 1
 
-        while (mutation >= mut.max):
-            # print("pruned because all mutation of this node have been tried {}".format(mutation))
-            # Go up one level and continue with the other mutation
-            genes.pop()
-            child = genes[-1][:]
-            mutation = mutationTrack.pop() + 1
+        if len(genes) >= maxDepth:
+            # Stoppen met tak als ie te diep wordt
+            # print("pruned because of branch depth > {}".format(maxDepth))
+            child, mutation = new_branch(genes, mutationTrack)
 
-            # print("going to do mutation {}".format(mutation))
+        while (mutation >= mut.max):
+            # Stop branch when all mutations have been tried
+            # print("pruned because all mutation of this node have been tried {}".format(mutation))
+            child, mutation = new_branch(genes, mutationTrack)
 
         mutationTrack.append(mutation)  # mutation  kept track of
 
-        # print("unaltered child {}\n".format(child))
+        # print("{}".format(genes))
+        # print(mutationTrack)
+
         # print("\nmutation {}: section to flip: [{}]:[{}] = {} -> {}".format(mutation, mut.start[mutation], mut.end[mutation],
         #     child[mut.start[mutation]:mut.end[mutation]],  child[mut.start[mutation]:mut.end[mutation]][::-1]))
 
@@ -60,12 +60,6 @@ def main(geneOrigin =  [4,3,2,1], maxDepth = 4, printer = True):
             # Stap 5: Controleren of een van de nieuwe kinderen de oplossing is
             Go = False
             genes.append(child[:])
-
-        elif len(genes) >= maxDepth:
-            # Stoppen met tak als ie te diep wordt
-            genes.pop()
-            mutationTrack.pop()
-            # print("pruned because of branch depth > {}".format(maxDepth))
 
         else:
             # Stap 7: Kinderen toevoegen aan stack, ze gaan ouders worden! Stap1
