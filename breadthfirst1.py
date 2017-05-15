@@ -1,9 +1,10 @@
 """
 First breadth first search algorithm to find a mutation sequence that turns one 'genome' into another
+
 Leander
 Nina
 
-started: 2017-5-2
+started: 2017-5-11
 """
 from mutations import mutationlist
 
