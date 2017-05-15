@@ -43,6 +43,7 @@ def main(geneOrigin =  [4,3,2,1], maxDepth = 4, printer = True):
             # print("pruned because all mutation of this node have been tried {}".format(mutation))
             # Go up one level and continue with the other mutation
             genes.pop()
+            child = genes[-1][:]
             mutation = mutationTrack.pop() + 1
 
             # print("going to do mutation {}".format(mutation))
