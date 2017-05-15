@@ -8,7 +8,7 @@ Nina
 started: 2017-5-2
 """
 
-def main(geneOrigin =  [4,3,2,1], maxDepth = 4, printer = True):
+def main(geneOrigin =  [11, 8, 6, 4, 5, 2, 1, 3, 7, 9 ,10], maxDepth = 6, printer = True):
     from mutations import mutationlist
     import time
 
@@ -43,6 +43,7 @@ def main(geneOrigin =  [4,3,2,1], maxDepth = 4, printer = True):
             # print("pruned because all mutation of this node have been tried {}".format(mutation))
             # Go up one level and continue with the other mutation
             genes.pop()
+            child = genes[-1][:]
             mutation = mutationTrack.pop() + 1
 
             # print("going to do mutation {}".format(mutation))
@@ -61,12 +62,14 @@ def main(geneOrigin =  [4,3,2,1], maxDepth = 4, printer = True):
         if child == solution:
             # Stap 5: Controleren of een van de nieuwe kinderen de oplossing is
             Go = False
-            genes.append(child[:])
+            genes.append(child)
 
         # stap 3: Controleren of het unieke kinnderen zijn
         elif (archive.get(key, False) != False) and (len(mutationTrack) > archive.get(key,100)):
             # Child already found and this time it is at a later depth, so don't add this child to the stack
             doubleCounter += 1
+            if doubleCounter % 100000 == 0:
+                print(mutationTrack)
             # print("non-unique value encountered for #{} time".format(doubleCounter))
 
         else:
@@ -80,7 +83,7 @@ def main(geneOrigin =  [4,3,2,1], maxDepth = 4, printer = True):
 
             else:
                 # Stap 7: Kinderen toevoegen aan stack, ze gaan ouders worden! Stap1
-                genes.append(child[:])
+                genes.append(child)
                 mutationTrack.append(-1)
 
     tduration = time.time() - tstart
@@ -91,10 +94,17 @@ def main(geneOrigin =  [4,3,2,1], maxDepth = 4, printer = True):
     #print(archive)
 
     if printer == True:
+        print("\ni,   start,  length, ending")
+        for i in range(len(mut.start)):
+            print("[{0:<2}]: {1:<7} : {2:<7} : {3:<7}".format(i, mut.start[i] + 1, mut.length[i], mut.end[i]))
+        print("number of possible mutations = {}\n".format(mut.max))
+
         i = 0
         for gene in genes:
             print("{} {}".format(i, gene))
             i += 1
+
+
 
     print("final mutation tracker: {}".format(mutationTrack))
     print("program took {0:.3f} seconds to find solution".format(tduration))

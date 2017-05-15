@@ -7,7 +7,7 @@ import flipsorter
 import random
 
 
-testgenome = [1,2,3,4,5,6,7,8,9,10,11,12]
+testgenome = [1,2,3,4,5,6,7,8]
 nTests = 10
 printer = False
 plot = False
@@ -24,13 +24,13 @@ for test in range(nTests):
     # Testing depthfirst 1, catching for indexError which occurs when no solution is found in the desired depth
     maxdepth = maxdepthDesire
     while True:
-        try:
+        # try:
             print("Depthfirst 1 (with archive): ")
             depthfirstt1.main(testgenome, maxdepth, printer)
-            break
-        except IndexError: # Not deep enough
-            maxdepth += 1
-            print('TRY AGAIN: going to depth: {}'.format(maxdepth))
+        #     break
+        # except IndexError: # Not deep enough
+        #     maxdepth += 1
+        #     print('TRY AGAIN: going to depth: {}'.format(maxdepth))
 
     # Testing depthfirst 0
     maxdepth = maxdepthDesire

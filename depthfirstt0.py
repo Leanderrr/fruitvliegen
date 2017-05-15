@@ -8,7 +8,7 @@ Nina
 started: 2017-5-2
 """
 
-def main(geneOrigin =  [4,3,2,1], maxDepth = 4, printer = True):
+def main(geneOrigin =  [8, 6, 4, 5, 2, 1, 3, 7, 9 ,10], maxDepth = 6, printer = True):
 
     from mutations import mutationlist
     import time
@@ -35,18 +35,21 @@ def main(geneOrigin =  [4,3,2,1], maxDepth = 4, printer = True):
     while Go:
         # stap 1: Kinderen maken
         child = genes[-1][:]
-        #print("\n {}".format(genes))
         mutation = mutationTrack.pop() + 1
 
         while (mutation >= mut.max):
             # print("pruned because all mutation of this node have been tried {}".format(mutation))
             # Go up one level and continue with the other mutation
             genes.pop()
+            child = genes[-1][:]
             mutation = mutationTrack.pop() + 1
 
             # print("going to do mutation {}".format(mutation))
 
         mutationTrack.append(mutation)  # mutation  kept track of
+
+        # print("\n {}".format(genes))
+        # print(mutationTrack)
 
         # print("unaltered child {}\n".format(child))
         # print("\nmutation {}: section to flip: [{}]:[{}] = {} -> {}".format(mutation, mut.start[mutation], mut.end[mutation],
@@ -64,7 +67,7 @@ def main(geneOrigin =  [4,3,2,1], maxDepth = 4, printer = True):
             # Stoppen met tak als ie te diep wordt
             genes.pop()
             mutationTrack.pop()
-            # print("pruned because of branch depth > {}".format(maxDepth))
+            # print("pruned because of branch depth > {}, it's {}".format(maxDepth, len(genes)))
 
         else:
             # Stap 7: Kinderen toevoegen aan stack, ze gaan ouders worden! Stap1
@@ -81,6 +84,11 @@ def main(geneOrigin =  [4,3,2,1], maxDepth = 4, printer = True):
     # print("number of possible mutations = {}\n".format(mut.max))
 
     if printer == True:
+        print("\ni,   start,  length, ending")
+        for i in range(len(mut.start)):
+            print("[{0:<2}]: {1:<7} : {2:<7} : {3:<7}".format(i, mut.start[i] + 1, mut.length[i], mut.end[i]))
+        # print("number of possible mutations = {}\n".format(mut.max))
+
         i = 0
         for gene in genes:
             print("{} {}".format(i, gene))

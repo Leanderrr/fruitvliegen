@@ -31,7 +31,7 @@ doubleCounter = 0
 
 while Go:
     # stap 1: Kinderen maken
-    child = genes[-1][:]
+    child = genes[0][:]
     # print("\n {}".format(genes))
     mutation = mutationTrack.pop() + 1
 
