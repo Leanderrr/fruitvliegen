@@ -1,3 +1,9 @@
+"""
+Functions for search algorithms
+
+Leander
+Nina
+"""
 def new_branch(genes, mutationTrack):
     genes.pop()
     child = genes[-1][:]

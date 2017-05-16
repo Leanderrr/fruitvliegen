@@ -11,7 +11,7 @@ from mutations import mutationlist
 from depthfirst import new_branch
 import time
 
-def main(geneOrigin = [5, 2, 7, 6, 8, 1, 10, 4, 3, 9], maxDepth = 6, printer = True):
+def main(geneOrigin = [5, 2, 7, 6, 8, 1, 10, 11, 4, 3, 9], maxDepth = 7, printer = True):
     geneLength = len(geneOrigin)
     genes = []
     genes.append(geneOrigin)
