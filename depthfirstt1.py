@@ -12,7 +12,7 @@ from depthfirst import new_branch
 import time
 
 
-def main(geneOrigin =  [3, 5, 1, 6, 7, 8, 4, 2], maxDepth = 4, printer = True):
+def main(geneOrigin = [7, 1, 4, 3, 5, 2, 6], maxDepth = 5, printer = True):
     geneLength = len(geneOrigin)
     genes = []
     genes.append(geneOrigin)

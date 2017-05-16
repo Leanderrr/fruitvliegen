@@ -6,12 +6,11 @@ import depthfirstt1
 import flipsorter
 import random
 
-
-testgenome = [1,2,3,4,5,6,7,8,9,10]
-nTests = 1
-printer = True
+testgenome = [1,2,3,4,5,6]
+nTests = 10
+printer = False
 plot = False
-maxdepthDesire = 6
+maxdepthDesire = 4
 
 # Test the programs nTest times with randomized sequences
 for test in range(nTests):
@@ -33,7 +32,7 @@ for test in range(nTests):
             print('TRY AGAIN: going to depth: {}'.format(maxdepth))
 
     # Testing depthfirst 0
-    maxdepth = maxdepthDesire
+    # maxdepth = maxdepthDesire
     while True:
         try:
             print("\nDepthfirst 0 (no archive): ")
