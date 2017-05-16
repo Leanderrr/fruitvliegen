@@ -70,7 +70,7 @@ def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12
             elif (archive.get(key, False) != False):
                 doubleCounter += 1
 
-            # child is not the solution nor in archive - so should be added to the end of thequeu and archive
+            # child is not the solution nor in archive - so should be added to the end of the queu and archive
             else:
                 priority = costfunction.main(child)
                 genes.put((priority, child))
