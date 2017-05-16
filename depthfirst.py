@@ -50,12 +50,12 @@ def plotMutations(genes, mutationTrack, mut):
             ax.text(x, y, '{}, '.format(gen))
             # Add colored rectangle showing gen value height
             ax.add_patch(patches.Rectangle(
-                (x-0.125, y-0.1), 0.25, 0.25,
+                (x-0.05, y-0.1), 0.25, 1,
                 facecolor=(colors[gen][0], colors[gen][1], colors[gen][2],0.7),
                 edgecolor="none"))
             x += 1/4
         y += 1
-
+    # Diagonal lines!
     i = 0
     for mutation in mutationTrack:
         # Plot mutation lines

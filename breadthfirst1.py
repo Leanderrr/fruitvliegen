@@ -11,6 +11,7 @@ started: 2017-5-15
 from mutations import mutationlist
 from breadthfirst import traceMutations
 from queue import PriorityQueue
+from depthfirst import plotMutations
 import costfunction
 import time
 
@@ -85,6 +86,8 @@ def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12
         for gene in genes:
             print("{} {}".format(i, gene))
             i += 1
+
+        plotMutations(genes, mutationTrack, mut)
 
     print("mutation tracker: {}".format(mutationTrack))
     print("depth level:      {}".format(levels))
