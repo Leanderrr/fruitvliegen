@@ -9,9 +9,10 @@ started: 2017-5-2
 """
 from mutations import mutationlist
 from depthfirst import new_branch
+from depthfirst import plotMutations
 import time
 
-def main(geneOrigin = [5, 2, 7, 6, 8, 1, 10, 11, 4, 3, 9], maxDepth = 7, printer = True):
+def main(geneOrigin = [5, 2, 7, 6, 8, 1, 4, 3, 9], maxDepth = 7, printer = True):
     geneLength = len(geneOrigin)
     genes = []
     genes.append(geneOrigin)
@@ -83,6 +84,8 @@ def main(geneOrigin = [5, 2, 7, 6, 8, 1, 10, 11, 4, 3, 9], maxDepth = 7, printer
 
     print("final mutation tracker: {}".format(mutationTrack))
     print("program took {0:.3f} seconds to find solution".format(tduration))
+
+    plotMutations(genes, mutationTrack, mut)
 
 if __name__ == '__main__':
     main()
