@@ -9,21 +9,20 @@ Nina
 
 2017-5-16
 """
-def main():
+def main(gene):
 
-    testsequence = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9]
+    #gene = [5,2,6,1,4,3,7,11,13,8,9,10]
     score = 0
 
     # Calculate priority
-    for i in range (0, len(testsequence)-1):
+    for i in range (0, len(gene)-1):
 
-        if testsequence[i] == testsequence[i+1]+1 or testsequence[i] == testsequence[i+1]-1:
+        if gene[i] == gene[i+1]+1 or gene[i] == gene[i+1]-1:
             score += 0
 
-        elif testsequence[i] != testsequence[i+1]+1 or testsequence[i] != testsequence[i+1]-1:
+        elif gene[i] != gene[i+1]+1 or gene[i] != gene[i+1]-1:
             score += 1
 
-    print("score = {}".format(score))
     return(score)
 
 if __name__ == "__main__":
