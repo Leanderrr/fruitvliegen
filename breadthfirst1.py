@@ -15,7 +15,7 @@ from depthfirst import plotMutations
 import costfunction
 import time
 
-def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9], printer = True):
+def main(geneOrigin =  [23, 1, 2, 11, 24, 26, 27, 28, 29, 30, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9], printer = True):
 
     geneLength = len(geneOrigin)
     genes = PriorityQueue()
@@ -90,7 +90,6 @@ def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12
         plotMutations(genes, mutationTrack, mut)
 
     print("mutation tracker: {}".format(mutationTrack))
-    print("depth level:      {}".format(levels))
 
     print('number of genomes in archive: {}'.format(len(archive)))
     print('# of double found sequences:  {}'.format(doubleCounter))

@@ -42,6 +42,11 @@ for test in range(nTests):
             maxdepth += 1
             print('TRY AGAIN: going to depth: {}'.format(maxdepth))
 
+    # Testing Breadthfirst
+
+    # Testing Breadthfirst priority cue
+
+
     # Testing the flipsorter
     print("\nFlipsorter: ")
     flipsorter.main(testgenome, plot, printer)
