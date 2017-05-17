@@ -19,7 +19,7 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
     flip = []
     cumlength = 0
 
-    print("Genome sequence: ")
+    # print("Genome sequence: ")
     tstart = time.time()
     # Sorting the genome
     for i in range(len(gene)):
@@ -45,11 +45,11 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
         for i in range(len(flips)):
             print("{0:<4}: {1:<9}: {2:<4}".format((i+1),flips[i][0],flips[i][1]))
 
-    # print("\nCumulative length of flips: {}".format(cumlength))
+        # print("\nCumulative length of flips: {}".format(cumlength))
+        print("Number of mutations:  {}".format(len(flips)))
 
     tduration = time.time() - tstart
-    print("Number of mutations:  {}".format(len(flips)))
-    print("program took {0:.3f} seconds to find solution".format(tduration))
+    print("{0:.3f}".format(tduration))
 
     # Figure showing mutations
     if plot == True:

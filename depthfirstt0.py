@@ -12,7 +12,7 @@ from depthfirst import new_branch
 from depthfirst import plotMutations
 import time
 
-def main(geneOrigin = [5, 2, 7, 6, 8, 1, 4, 3, 9], maxDepth = 7, printer = True):
+def main(geneOrigin = [5, 2, 7, 6, 8, 1, 4, 3, 9], maxDepth = 7, printer = True, plotter = True):
     geneLength = len(geneOrigin)
     genes = []
     genes.append(geneOrigin)
@@ -68,6 +68,7 @@ def main(geneOrigin = [5, 2, 7, 6, 8, 1, 4, 3, 9], maxDepth = 7, printer = True)
             mutationTrack.append(-1)
 
     tduration = time.time() - tstart
+    print("{0:.3f}".format(tduration))
 
     #print("archive:\n")
     #print(archive)
@@ -83,9 +84,10 @@ def main(geneOrigin = [5, 2, 7, 6, 8, 1, 4, 3, 9], maxDepth = 7, printer = True)
             i += 1
 
     print("final mutation tracker: {}".format(mutationTrack))
-    print("program took {0:.3f} seconds to find solution".format(tduration))
 
-    plotMutations(genes, mutationTrack, mut)
+    if plotter == True:
+        plotMutations(genes, mutationTrack, mut)
+
 
 if __name__ == '__main__':
     main()
