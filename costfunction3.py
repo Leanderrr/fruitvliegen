@@ -24,7 +24,7 @@ def main(gene):
     for i in range (0, len(gene)-1):
 
         if gene[i] == gene[i + 1] + 1 or gene[i] == gene[i + 1] - 1:
-            score += repeat
+            score += pow(repeat,2)
             repeat += 1
 
         else: #gene[i] != gene[i+1]+1 or gene[i] != gene[i+1]-1:
