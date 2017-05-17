@@ -15,14 +15,15 @@ from depthfirst import plotMutations
 import costfunction
 import costfunction2
 import costfunction1
-import costfunction3
+import costfunction4
+import costfunction5
 import time
 
 def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9], printer = True):
 
     geneLength = len(geneOrigin)
     genes = PriorityQueue()
-    priority = costfunction3.main(geneOrigin)
+    priority = costfunction5.main(geneOrigin)
     print("priority = {}".format(priority))
     genes.put((priority, geneOrigin))
 
@@ -65,7 +66,7 @@ def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12
             if child == solution:
                 Go = False
                 print("wiehoe")
-                priority = costfunction3.main(child)
+                priority = costfunction5.main(child)
                 genes.put((priority, child))
                 archive[key] = [level, i]
                 break
@@ -76,7 +77,7 @@ def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12
 
             # child is not the solution nor in archive - so should be added to the end of the queu and archive
             else:
-                priority = costfunction3.main(child)
+                priority = costfunction5.main(child)
                 genes.put((priority, child))
                 archive[key] = [level, i]
 

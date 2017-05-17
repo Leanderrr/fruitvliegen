@@ -2,7 +2,8 @@
 Cost function used to decide priority in priority queue for BFS
 
 Cost calculated by adding the difference between all neighbours in the
-array
+array to the power of 2, making numbers to be neighbouring numbers very 
+far away from them very unlikely
 
 Nina
 
@@ -14,7 +15,7 @@ def main(gene):
 
     # calculate score
     for i in range (0, len(gene)-1):
-        score += abs(gene[i] - gene[i+1])
+        score += pow(abs(gene[i] - gene[i+1]),2)
 
     print(score)
     return(score)

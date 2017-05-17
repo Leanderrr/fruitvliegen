@@ -11,7 +11,6 @@ Nina
 """
 def main(gene):
 
-    #gene = [5,2,6,1,4,3,7,11,13,8,9,10]
     score = 0
 
     # Calculate priority

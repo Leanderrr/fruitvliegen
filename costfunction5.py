@@ -12,19 +12,16 @@ def main(gene):
 
     #gene = [5,2,6,1,4,3,7,11,13,8,9,10]
     score = 0
-    priority = 0
     repeat = 1
 
     # calculate the maxscore
     maxscore = sum(gene) - len(gene)
-    print(maxscore)
-
 
     # calculate score
     for i in range (0, len(gene)-1):
 
         if gene[i] == gene[i + 1] + 1 or gene[i] == gene[i + 1] - 1:
-            score += pow(repeat,2)
+            score += pow(repeat,3)
             repeat += 1
 
         else: #gene[i] != gene[i+1]+1 or gene[i] != gene[i+1]-1:
