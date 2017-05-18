@@ -39,6 +39,7 @@ def plotMutations(genes, mutationTrack, mut):
     """
     cm_subsection = linspace(0, 1, len(genes[0])+2)
     colors = [cm.summer(x) for x in cm_subsection]
+    colors2 = [cm.Reds(x) for x in cm_subsection]
 
     fig = plt.figure(figsize=(10, 15))
     plt.title("mutation sequence")
@@ -55,7 +56,7 @@ def plotMutations(genes, mutationTrack, mut):
             # Add colored rectangle showing gen value height
             ax.add_patch(patches.Rectangle(
                 (x-0.05, y-0.1), 0.25, 1,
-                facecolor=(colors[gen][0:2],0.7),
+                facecolor=(colors[gen][0],colors[gen][1], colors[gen][2], 0.7),
                 edgecolor="none"))
             x += 1/4
         y += 1
@@ -64,17 +65,18 @@ def plotMutations(genes, mutationTrack, mut):
     i = 0
     for mutation in mutationTrack:
         # Plot mutation lines
-        x1 = (mut.start[mutation] + 0.15)/4
-        x2 = (mut.end[mutation] - 1 + 0.15)/4
-        y1 = i + 0.15
+        x1 = (mut.start[mutation])/4 - 0.05
+        x2 = (mut.end[mutation])/4 - 0.05
+        y1 = i + 0.8
         y2 = i + 0.9
         i += 1
-        ax.plot([x1, x2], [y1, y2], color=colors[mut.length[mutation]+1], linewidth=3)
-        ax.plot([x1, x2], [y2, y1], color=colors[mut.length[mutation]+1], linewidth=3)
+        ax.plot([x1, x2], [y1, y2], color=colors2[mut.length[mutation]+1], linewidth=1)
+        ax.plot([x1, x2], [y2, y1], color=colors2[mut.length[mutation]+1], linewidth=1)
 
 
     plt.ylabel("mutation (n)")
-    ax.axis([-0.25, len(genes)/2, -0.5, len(genes)])
+    plt.xlabel("genome sequence")
+    ax.axis([-0.05, len(genes[0])/4, -0.1, len(genes)])
     plt.show()
 
 

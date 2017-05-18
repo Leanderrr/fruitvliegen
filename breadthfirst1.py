@@ -25,13 +25,10 @@ def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12
 
     geneLength = len(geneOrigin)
     genes = PriorityQueue()
-<<<<<<< HEAD
     priority = costfunction5.main(geneOrigin)
     print("priority = {}".format(priority))
-=======
     priority = costfunction.main(geneOrigin)
     # print("priority = {}".format(priority))
->>>>>>> origin/master
     genes.put((priority, geneOrigin))
 
     # Create solution array
@@ -72,13 +69,10 @@ def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12
             # check if child is the solution
             if child == solution:
                 Go = False
-<<<<<<< HEAD
                 print("wiehoe")
                 priority = costfunction5.main(child)
-=======
                 # print("wiehoe")
                 priority = costfunction.main(child)
->>>>>>> origin/master
                 genes.put((priority, child))
                 archive[key] = [level, i]
                 break
