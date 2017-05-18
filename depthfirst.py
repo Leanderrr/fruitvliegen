@@ -70,9 +70,8 @@ def plotMutations(genes, mutationTrack, mut):
         y1 = i + 0.8
         y2 = i + 0.9
         i += 1
-        ax.plot([x1, x2], [y1, y2], color=colors2[mut.length[mutation]+1], linewidth=1)
-        ax.plot([x1, x2], [y2, y1], color=colors2[mut.length[mutation]+1], linewidth=1)
-
+        ax.plot([x1, x2], [y1, y2], color=colors2[mut.length[mutation]+1], linewidth=1.5)
+        ax.plot([x1, x2], [y2, y1], color=colors2[mut.length[mutation]+1], linewidth=1.5)
 
     plt.ylabel("mutation (n)")
     plt.xlabel("genome sequence")

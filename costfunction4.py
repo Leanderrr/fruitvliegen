@@ -17,7 +17,7 @@ def main(gene):
     for i in range (0, len(gene)-1):
         score += pow(abs(gene[i] - gene[i+1]),2)
 
-    print(score)
+    # print(score)
     return(score)
 
 if __name__ == "__main__":
