@@ -7,6 +7,7 @@ Nina
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib import cm
+from mutations import mutationlist
 import costfunction
 from numpy import linspace
 
@@ -42,21 +43,21 @@ def plotMutations(genes, mutationTrack, mut):
     fig = plt.figure(figsize=(10, 15))
     plt.title("mutation sequence")
     ax = fig.add_subplot(111)
+
+
     y = 0
     for genome in genes:
         # Print genome text in figure
         # score = costfunction.main(genome)
-
         x = 0
         for gen in genome:
             ax.text(x, y, '{}, '.format(gen))
             # Add colored rectangle showing gen value height
             ax.add_patch(patches.Rectangle(
                 (x-0.05, y-0.1), 0.25, 1,
-                facecolor=(colors[gen][0], colors[gen][1], colors[gen][2],0.7),
+                facecolor=(colors[gen][0:2],0.7),
                 edgecolor="none"))
             x += 1/4
-
         y += 1
 
     # Diagonal lines!
@@ -75,3 +76,25 @@ def plotMutations(genes, mutationTrack, mut):
     plt.ylabel("mutation (n)")
     ax.axis([-0.25, len(genes)/2, -0.5, len(genes)])
     plt.show()
+
+
+def mutationLineTest(genome, mutationTrack):
+    """
+    This function is used to test the outcome of a mutationTracker given a certain starting genome
+    input args:
+        genome: The starting genome (a list of numbers)
+        mutationTrack: The mutation tracker which denotes which mutations should be done on the genome
+            mutation indexes are based on the mutationlist class (a list of numbers)
+
+    output:
+        genes: A list of genomes which results from the requested mutationList (a list of lists of numbers)
+    """
+    mut = mutationlist(len(genome)) # Get which mutations are possible on this genome
+    genes = [genome]
+
+    # Do all the mutations in the mutationTracker and save the results
+    for mutation in mutationTrack:
+        genome[mut.start[mutation]:mut.end[mutation]] = genome[mut.start[mutation]:mut.end[mutation]][::-1]
+        genes.append(genome[:])
+
+    return genes

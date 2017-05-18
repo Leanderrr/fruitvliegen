@@ -8,7 +8,7 @@ import breadthfirst1
 import flipsorter
 import random
 
-testgenome = [1,2,3,4,5,6,7,8,9]
+testgenome = [1,2,3,4,5]
 nTests = 10
 printer = False
 plot = False
