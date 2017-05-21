@@ -2,6 +2,7 @@
 First breadth first search algorithm to find a mutation sequence that turns one 'genome' into another
 MET ARCHIEF
 EN PRIORITY CUE
+EN stopt niet als ie één oplossing heeft gevonden
 Deze is heel snel in de eerste oplossing vinden
 
 Leander
@@ -17,12 +18,15 @@ from depthfirst import plotMutations
 from cost import cost
 import time
 
-# [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9]
-def main(geneOrigin =  [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12, 5, 6, 17, 20], printer = True, plotter = True):
+# [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12, 5, 6, 17, 20] # Fonsos sequentie
+# [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9] # Official sequenty
+def main(geneOrigin =  [1,5,3,4,2,8,6,7,9,10], printer = True, plotter = False):
+
+    function = 4 # The costfunction used!
+    stop = 30 # Stop after this many solutions are found
 
     geneLength = len(geneOrigin)
     genes = PriorityQueue()
-    function = 3 # The costfunction used!
     priority = cost(function, geneOrigin)
     # print("priority = {}".format(priority))
     genes.put((priority, geneOrigin))
@@ -34,10 +38,11 @@ def main(geneOrigin =  [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12
 
     # Create the list of possible mutations in this genome
     mut = mutationlist(geneLength)
-    # print("max mutations per mother: {}".format(mut.max))
+    # print("max mutations for this genome: {}".format(mut.max))
 
     # Breadth First Search
     archive = dict()
+    solnum = 0
     key = ".".join(str(x) for x in geneOrigin)
     archive[key] = [0] # The value is the depth level of this gene sequence
     Go = True
@@ -64,12 +69,14 @@ def main(geneOrigin =  [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12
             # print(key)
             # check if child is the solution
             if child == solution:
-                Go = False
-                # print("wiehoe")
                 priority = cost(function, child)
-                genes.put((priority, child))
+                # genes.put((priority, child))
+                key = ".".join((key, str(solnum))) # Remember which solution this was in the library
+                print("sol {:<3}: level:  {},  mutation: {}".format(solnum, level, i))
                 archive[key] = [level, i]
-                break
+                solnum += 1
+                if solnum == stop:
+                    Go = False
 
             # check if child is already in the archive - if so don't add this child to the queue
             elif (archive.get(key, False) != False):
@@ -84,21 +91,20 @@ def main(geneOrigin =  [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12
     tduration = time.time() - tstart
     print("{0:.3f}".format(tduration))
 
-    genes, mutationTrack, levels = traceMutations(archive, mut, geneLength, geneOrigin, solution)
-
     if printer == True:
-        i = 0
-        for gene in genes:
-            print("{} {}".format(i, gene))
-            i += 1
-
         print('number of genomes in archive: {}'.format(len(archive)))
         print('# of double found sequences:  {}'.format(doubleCounter))
 
-    print("mutation tracker: {}".format(mutationTrack))
+    # Retrace which mutations were done to get the solutions
+    for i in range(0, stop):
+        solutioni = solution[:]
+        solutioni.extend([i])
+        genes, mutationTrack, levels = traceMutations(archive, mut, geneLength, geneOrigin, solutioni)
 
-    if plotter == True:
-        plotMutations(genes, mutationTrack, mut)
+        print("{:<3}. mutation tracker: {}".format(i, mutationTrack))
+
+        if plotter == True:
+            plotMutations(genes, mutationTrack, mut)
 
 
 if __name__ == '__main__':

@@ -5,11 +5,10 @@ First 'algorithm' to get the genome of the Miranda from the genome of Melanogast
 2017-4-13
 Leander de Kraker
 """
-def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9], plot = True, printer = True):
-    if plot == 'on':
-        import matplotlib.pyplot as plt
-    import time
+import matplotlib.pyplot as plt
+import time
 
+def main(geneOrigin = [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12, 5, 6, 17, 20], plot = True, printer = True):
     gene = geneOrigin
     genes = []
     solution = range(1, len(gene)+1) # Genome of Miranda
