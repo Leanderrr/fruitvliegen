@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib import cm
 from mutations import mutationlist
-import costfunction
+import cost
 from numpy import linspace
 
 
@@ -42,9 +42,7 @@ def plotMutations(genes, mutationTrack, mut):
     colors2 = [cm.Reds(x) for x in cm_subsection]
 
     fig = plt.figure(figsize=(10, 15))
-    plt.title("mutation sequence")
     ax = fig.add_subplot(111)
-
 
     y = 0
     for genome in genes:
@@ -75,6 +73,7 @@ def plotMutations(genes, mutationTrack, mut):
 
     plt.ylabel("mutation (n)")
     plt.xlabel("genome sequence")
+    plt.title("mutation sequence. nr of mutations = {}".format(len(mutationTrack)))
     ax.axis([-0.05, len(genes[0])/4, -0.1, len(genes)])
     plt.show()
 
