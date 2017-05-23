@@ -23,10 +23,18 @@ def new_branch(genes, mutationTrack):
         A new child
         New current mutation
     """
+
+    if len(genes) == 1:
+        print("\n\nSTACK EMPTY: All branches died out due to pruning and doubles!!!")
+        child = genes[-1][:]
+        mutation = 0
+        Go = False
+        return child, mutation, Go
+
     genes.pop()
     child = genes[-1][:]
     mutation = mutationTrack.pop() + 1
-    return child, mutation
+    return child, mutation, True
 
 
 def plotMutations(genes, mutationTrack, mut):
@@ -74,6 +82,12 @@ def plotMutations(genes, mutationTrack, mut):
     plt.ylabel("mutation (n)")
     plt.xlabel("genome sequence")
     plt.title("mutation sequence. nr of mutations = {}".format(len(mutationTrack)))
+    plt.tick_params(
+        axis='x',
+        which='both',  # both major and minor ticks are affected
+        bottom='off',  # ticks along the bottom edge are off
+        top='off',  # ticks along the top edge are off
+        labelbottom='off')  # labels along the bottom edge are off
     ax.axis([-0.05, len(genes[0])/4, -0.1, len(genes)])
     plt.show()
 

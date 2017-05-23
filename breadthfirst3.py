@@ -3,6 +3,7 @@ First breadth first search algorithm to find a mutation sequence that turns one 
 MET ARCHIEF
 EN PRIORITY CUE
 EN stopt niet als ie één oplossing heeft gevonden
+EN gooit de helft van de queue weg
 Deze is heel snel in de eerste oplossing vinden
 
 Leander
@@ -13,7 +14,7 @@ started: 2017-5-15
 
 from mutations import mutationlist
 from breadthfirst import traceMutations
-from queue import PriorityQueue
+from heapq import *
 from depthfirst import plotMutations
 from cost import cost
 import time
@@ -22,14 +23,14 @@ import time
 #  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9] # Official sequency
 def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9], printer = True, plotter = False):
 
-    function = 5 # The costfunction used!
-    stop = 10 # Stop after this many solutions are found
+    function = 3 # The costfunction used!
+    stop = 50 # Stop after this many solutions are found
     prunelevel = 25
     geneLength = len(geneOrigin)
-    genes = PriorityQueue()
+    genes = []
     priority = cost(function, geneOrigin)
     # print("priority = {}".format(priority))
-    genes.put((priority, geneOrigin))
+    heappush(genes, (priority, geneOrigin))
 
     # Create solution array
     solution = []
@@ -49,16 +50,16 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
     doubleCounter = 0
     tstart = time.time()
 
-    while (not genes.empty()) and (Go == True):
+    while (not len(genes)==0) and (Go == True):
         # stap 1: Alle mogelijke kinderen maken en opslaan - checken of een van de kinderen de oplossing is. (dat is een grote stap)
 
-        priority, mother = genes.get()
+        priority, mother = heappop(genes)
         #print("mother = {}".format(mother))
         motherkey = ".".join(str(x) for x in mother)
         level = archive[motherkey][0] + 1
 
         if level > prunelevel:
-            genes.get()
+            heappop(genes)
 
         else:
             # print(archive[motherkey])
@@ -76,10 +77,16 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
                     # genes.put((priority, child))
                     key = ".".join((key, str(solnum))) # Remember which solution this was in the library
                     print("sol {:<3}: level:  {}".format(solnum, level))
-                    print(genes.qsize())
+                    print(len(genes))
                     archive[key] = [level, i, priority]
+
+                    thissol = solution[:]
+                    thissol.extend([solnum])
+                    __, mutationTrack2, __ = traceMutations(archive, mut, geneLength, geneOrigin, thissol)
+                    print(mutationTrack2)
+
                     solnum += 1
-                    prunelevel = level - 1
+                    prunelevel = level
                     if solnum == stop:
                         Go = False
 
@@ -91,8 +98,12 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
                 # child is not the solution nor in archive - so should be added to the end of the queue and archive
                 else:
                     priority = cost(function, child)
-                    genes.put((priority, child))
+                    heappush(genes, (priority, child))
                     archive[key] = [level, i, priority]
+
+            del genes[int(len(genes)-(len(genes)/8))::]
+            heapify(genes)
+
 
 
 
@@ -107,7 +118,6 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
     for i in range(0, solnum):
         solutioni = solution[:]
         solutioni.extend([i])
-        genes, mutationTrack, levels = traceMutations(archive, mut, geneLength, geneOrigin, solutioni)
 
         print("{:<3}. mutation tracker: {}".format(i, mutationTrack))
 

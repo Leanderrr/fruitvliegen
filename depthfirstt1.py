@@ -13,7 +13,7 @@ from depthfirst import plotMutations
 import time
 
 
-def main(geneOrigin = [5, 2, 7, 6, 8, 1, 4, 3, 9], maxDepth = 5, printer = True, plotter = True):
+def main(geneOrigin=[5, 2, 1, 4, 3], maxDepth=2, printer=True, plotter=True):
     geneLength = len(geneOrigin)
     genes = []
     genes.append(geneOrigin)
@@ -35,6 +35,8 @@ def main(geneOrigin = [5, 2, 7, 6, 8, 1, 4, 3, 9], maxDepth = 5, printer = True,
     doubleCounter = 0
     tstart = time.time()
     while Go:
+        print(len(genes))
+
         # stap 1: Kinderen maken
         child = genes[-1][:]
         # print("\n {}".format(genes))
@@ -43,12 +45,12 @@ def main(geneOrigin = [5, 2, 7, 6, 8, 1, 4, 3, 9], maxDepth = 5, printer = True,
         if len(genes) >= maxDepth:
             # Stoppen met tak als ie te diep wordt
             # print("pruned because of branch depth > {}".format(maxDepth))
-            child, mutation = new_branch(genes, mutationTrack)
+            child, mutation, Go = new_branch(genes, mutationTrack)
 
         while (mutation >= mut.max):
             # print("pruned because all mutation of this node have been tried {}".format(mutation))
             # Go up one level and continue with the other mutation
-            child, mutation = new_branch(genes, mutationTrack)
+            child, mutation, Go = new_branch(genes, mutationTrack)
 
         mutationTrack.append(mutation)  # mutation  kept track of
 

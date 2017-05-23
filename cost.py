@@ -32,7 +32,7 @@ def cost(function, gene):
 
     elif function == 2:
         """
-        Score calculated by counting the number of elements which are already sorted
+        Look for sequentially correct numbers, add more to score every time it's correct
         """
         repeat = 1
 
@@ -54,7 +54,7 @@ def cost(function, gene):
 
     elif function == 3:
         """
-        Score calculated by counting the number of elements which are already sorted
+        Look for sequentially correct numbers, add more (with exponent) every time it's correct
         """
         repeat = 1
 
@@ -103,6 +103,20 @@ def cost(function, gene):
 
         # converts score to priority
         score = maxscore / score
+
+    elif function == 6:
+        """
+        Look for sequentially correct numbers, add more more (with exponent) every time it's correct
+        """
+
+        for i in range(1, len(gene)):
+            score += abs(gene[i]-i)
+
+
+    elif function == 7:
+        """
+
+        """
 
     else:
         print("This score function does not exist (yet)/ incorrect function call")
