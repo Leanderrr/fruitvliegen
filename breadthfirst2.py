@@ -22,9 +22,10 @@ import time
 #  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9] # Official sequenty
 def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9], printer = True, plotter = True):
 
+
     function = 0 # The costfunction used!
     padding = True # Add 0 before genome, end+1 behind genome when calculating cost: prioritize early correctness
-    stop = 30 # Stop after this many solutions are found
+    stop = 15 # Stop after this many solutions are found
     prunelevel = 25 # Default depth level to start pruning
 
     geneLength = len(geneOrigin)
@@ -87,7 +88,7 @@ def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12
                     print(mutationTrack2)
 
                     solnum += 1
-                    prunelevel = level - 1
+                    prunelevel = level
                     if solnum == stop:
                         Go = False
 
@@ -118,8 +119,8 @@ def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12
 
         print("{:<3}. mutation tracker: {}".format(i, mutationTrack))
 
-    if plotter == True:
-        plotMutations(genes, mutationTrack, mut)
+        if plotter == True:
+            plotMutations(genes, mutationTrack, mut)
 
 
 if __name__ == '__main__':
