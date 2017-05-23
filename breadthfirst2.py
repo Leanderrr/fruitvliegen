@@ -19,8 +19,8 @@ from cost import cost
 import time
 
 # [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12, 5, 6, 17, 20] # Fonsos sequentie
-#  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9] # Official sequency
-def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9], printer = True, plotter = False):
+#  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9] # Official sequenty
+def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9], printer = True, plotter = True):
 
     function = 5 # The costfunction used!
     stop = 10 # Stop after this many solutions are found
@@ -79,7 +79,7 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
                     print(genes.qsize())
                     archive[key] = [level, i, priority]
                     solnum += 1
-                    prunelevel = level - 1
+                    prunelevel = level
                     if solnum == stop:
                         Go = False
 
@@ -95,6 +95,33 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
                     archive[key] = [level, i, priority]
 
 
+        # mutate the child - add to queue if not already in archive nor solution of the problem
+        for i in range(0, mut.max):
+
+            child = mother[:]
+            child[mut.start[i]:mut.end[i]] = child[mut.start[i]:mut.end[i]][::-1]
+            key = ".".join(str(x) for x in child)
+            # print(key)
+            # check if child is the solution
+            if child == solution:
+                # priority = cost(function, child)
+                # genes.put((priority, child))
+                key = ".".join((key, str(solnum))) # Remember which solution this was in the library
+                print("sol {:<3}: level:  {},  mutation: {}".format(solnum, level, i))
+                archive[key] = [level, i]
+                solnum += 1
+                if solnum == stop:
+                    Go = False
+
+            # check if child is already in the archive - if so don't add this child to the queue
+            elif (archive.get(key, False) != False):
+                doubleCounter += 1
+
+            # child is not the solution nor in archive - so should be added to the end of the queue and archive
+            else:
+                priority = cost(function, child)
+                genes.put((priority, child))
+                archive[key] = [level, i]
 
     tduration = time.time() - tstart
     print("{0:.3f}".format(tduration))
