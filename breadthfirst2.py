@@ -22,12 +22,14 @@ import time
 #  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9] # Official sequenty
 def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9], printer = True, plotter = True):
 
-    function = 5 # The costfunction used!
-    stop = 10 # Stop after this many solutions are found
-    prunelevel = 25
+    function = 0 # The costfunction used!
+    padding = True # Add 0 before genome, end+1 behind genome when calculating cost: prioritize early correctness
+    stop = 30 # Stop after this many solutions are found
+    prunelevel = 25 # Default depth level to start pruning
+
     geneLength = len(geneOrigin)
     genes = PriorityQueue()
-    priority = cost(function, geneOrigin)
+    priority = cost(function, padding, geneOrigin)
     # print("priority = {}".format(priority))
     genes.put((priority, geneOrigin))
 
@@ -72,14 +74,20 @@ def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12
 
                 # check if child is the solution
                 if child == solution:
-                    priority = cost(function, child)
+                    priority = cost(function, padding, child)
                     # genes.put((priority, child))
                     key = ".".join((key, str(solnum))) # Remember which solution this was in the library
                     print("sol {:<3}: level:  {}".format(solnum, level))
                     print(genes.qsize())
                     archive[key] = [level, i, priority]
+
+                    thissol = solution[:]
+                    thissol.extend([solnum])
+                    __, mutationTrack2, __ = traceMutations(archive, mut, geneLength, geneOrigin, thissol)
+                    print(mutationTrack2)
+
                     solnum += 1
-                    prunelevel = level
+                    prunelevel = level - 1
                     if solnum == stop:
                         Go = False
 
@@ -90,7 +98,7 @@ def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12
 
                 # child is not the solution nor in archive - so should be added to the end of the queue and archive
                 else:
-                    priority = cost(function, child)
+                    priority = cost(function, padding, child)
                     genes.put((priority, child))
                     archive[key] = [level, i, priority]
 

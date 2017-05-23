@@ -7,17 +7,32 @@ Nina
 2017-5-16
 """
 
-def cost(function, gene):
+def cost(function, function2, gene):
+    """
+    input: function: Selection of which function should be used
+           function2: Select
+    """
     score = 0
 
-    if function == 0:
-        # Calculate priority
-        for i in range (0, len(gene)-1):
+    # PADDING ON/OFF
+    if function2 == True:
+        genome = gene[:]
+        genome.extend([len(genome) + 1])
+        genome.insert(0, 0)
+    else:
+        genome = gene[:]
 
-            if gene[i] == gene[i+1]+1 or gene[i] == gene[i+1]-1:
+    # Cost function
+    if function == 0:
+        """
+
+        """
+        for i in range (0, len(genome)-1):
+
+            if genome[i] == genome[i+1]+1 or genome[i] == genome[i+1]-1:
                 score += 0
 
-            elif gene[i] != gene[i+1]+1 or gene[i] != gene[i+1]-1:
+            elif genome[i] != genome[i+1]+1 or genome[i] != genome[i+1]-1:
                 score += 1
 
 
@@ -26,8 +41,8 @@ def cost(function, gene):
         Adds 1 to the score when a number is not adjacent to a number it should be adjacent to
         """
         # calculate score
-        for i in range(0, len(gene) - 1):
-            score += abs(gene[i] - gene[i + 1])
+        for i in range(0, len(genome) - 1):
+            score += abs(genome[i] - genome[i + 1])
 
 
     elif function == 2:
@@ -36,11 +51,11 @@ def cost(function, gene):
         """
         repeat = 1
 
-        maxscore = sum(gene) - len(gene)
+        maxscore = sum(genome) - len(genome)
         # calculate score
-        for i in range(0, len(gene) - 1):
+        for i in range(0, len(genome) - 1):
 
-            if gene[i] == gene[i + 1] + 1 or gene[i] == gene[i + 1] - 1:
+            if genome[i] == genome[i + 1] + 1 or genome[i] == genome[i + 1] - 1:
                 score += repeat
                 repeat += 1
 
@@ -58,10 +73,10 @@ def cost(function, gene):
         """
         repeat = 1
 
-        maxscore = sum(gene) - len(gene)
-        for i in range(0, len(gene) - 1):
+        maxscore = sum(genome) - len(genome)
+        for i in range(0, len(genome) - 1):
 
-            if gene[i] == gene[i + 1] + 1 or gene[i] == gene[i + 1] - 1:
+            if genome[i] == genome[i + 1] + 1 or genome[i] == genome[i + 1] - 1:
                 score += pow(repeat, 2)
                 repeat += 1
 
@@ -79,8 +94,8 @@ def cost(function, gene):
         array to the power of 2, making numbers to be neighbouring numbers very
         far away from them very unlikely
         """
-        for i in range(0, len(gene) - 1):
-            score += pow(abs(gene[i] - gene[i + 1]), 2)
+        for i in range(0, len(genome) - 1):
+            score += pow(abs(genome[i] - genome[i + 1]), 2)
 
 
 
@@ -90,10 +105,10 @@ def cost(function, gene):
         """
         repeat = 1
 
-        maxscore = sum(gene) - len(gene)
-        for i in range(0, len(gene) - 1):
+        maxscore = sum(genome) - len(genome)
+        for i in range(0, len(genome) - 1):
 
-            if gene[i] == gene[i + 1] + 1 or gene[i] == gene[i + 1] - 1:
+            if genome[i] == genome[i + 1] + 1 or genome[i] == genome[i + 1] - 1:
                 score += pow(repeat, 3)
                 repeat += 1
 
@@ -109,17 +124,11 @@ def cost(function, gene):
         looks how far off the gene is from its final desired position. It's really bad
         """
 
-        for i in range(1, len(gene)):
-            score += abs(gene[i]-i)
-
-
-    elif function == 7:
-        """
-
-        """
+        for i in range(1, len(genome)):
+            score += abs(genome[i] - i)
 
     else:
-        print("This score function does not exist (yet)/ incorrect function call")
+        print("This score function does not exist (yet)/ incorrect function call. PLEASE STOP")
         return "ERROR"
 
 

@@ -21,14 +21,15 @@ import time
 
 # [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12, 5, 6, 17, 20] # Fonsos sequentie
 #  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9] # Official sequency
-def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9], printer = True, plotter = False):
+def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9], printer = True, plotter = True):
 
-    function = 3 # The costfunction used!
-    stop = 50 # Stop after this many solutions are found
+    function = 0 # The costfunction used!
+    padding = True # Padding for the costfunction
+    stop = 1 # Stop after this many solutions are found
     prunelevel = 25
     geneLength = len(geneOrigin)
     genes = []
-    priority = cost(function, geneOrigin)
+    priority = cost(function, padding, geneOrigin)
     # print("priority = {}".format(priority))
     heappush(genes, (priority, geneOrigin))
 
@@ -73,7 +74,7 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
 
                 # check if child is the solution
                 if child == solution:
-                    priority = cost(function, child)
+                    priority = cost(function, padding, child)
                     # genes.put((priority, child))
                     key = ".".join((key, str(solnum))) # Remember which solution this was in the library
                     print("sol {:<3}: level:  {}".format(solnum, level))
@@ -97,14 +98,13 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
 
                 # child is not the solution nor in archive - so should be added to the end of the queue and archive
                 else:
-                    priority = cost(function, child)
+                    priority = cost(function, padding, child)
                     heappush(genes, (priority, child))
                     archive[key] = [level, i, priority]
 
+            # Remove a part of the queue
             del genes[int(len(genes)-(len(genes)/8))::]
             heapify(genes)
-
-
 
 
     tduration = time.time() - tstart
@@ -119,6 +119,7 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
         solutioni = solution[:]
         solutioni.extend([i])
 
+        genes, mutationTrack, levels = traceMutations(archive, mut, geneLength, geneOrigin, solutioni)
         print("{:<3}. mutation tracker: {}".format(i, mutationTrack))
 
         if plotter == True:
