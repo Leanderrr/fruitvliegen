@@ -95,34 +95,6 @@ def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12
                     archive[key] = [level, i, priority]
 
 
-        # mutate the child - add to queue if not already in archive nor solution of the problem
-        for i in range(0, mut.max):
-
-            child = mother[:]
-            child[mut.start[i]:mut.end[i]] = child[mut.start[i]:mut.end[i]][::-1]
-            key = ".".join(str(x) for x in child)
-            # print(key)
-            # check if child is the solution
-            if child == solution:
-                # priority = cost(function, child)
-                # genes.put((priority, child))
-                key = ".".join((key, str(solnum))) # Remember which solution this was in the library
-                print("sol {:<3}: level:  {},  mutation: {}".format(solnum, level, i))
-                archive[key] = [level, i]
-                solnum += 1
-                if solnum == stop:
-                    Go = False
-
-            # check if child is already in the archive - if so don't add this child to the queue
-            elif (archive.get(key, False) != False):
-                doubleCounter += 1
-
-            # child is not the solution nor in archive - so should be added to the end of the queue and archive
-            else:
-                priority = cost(function, child)
-                genes.put((priority, child))
-                archive[key] = [level, i]
-
     tduration = time.time() - tstart
     print("{0:.3f}".format(tduration))
 
@@ -138,8 +110,8 @@ def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12
 
         print("{:<3}. mutation tracker: {}".format(i, mutationTrack))
 
-        if plotter == True:
-            plotMutations(genes, mutationTrack, mut)
+    if plotter == True:
+        plotMutations(genes, mutationTrack, mut)
 
 
 if __name__ == '__main__':

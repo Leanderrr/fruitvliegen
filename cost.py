@@ -106,7 +106,7 @@ def cost(function, gene):
 
     elif function == 6:
         """
-        Look for sequentially correct numbers, add more more (with exponent) every time it's correct
+        looks how far off the gene is from its final desired position. It's really bad
         """
 
         for i in range(1, len(gene)):
@@ -121,5 +121,6 @@ def cost(function, gene):
     else:
         print("This score function does not exist (yet)/ incorrect function call")
         return "ERROR"
+
 
     return score
