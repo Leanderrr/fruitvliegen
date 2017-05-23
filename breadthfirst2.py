@@ -20,9 +20,9 @@ import time
 
 # [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12, 5, 6, 17, 20] # Fonsos sequentie
 # [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9] # Official sequenty
-def main(geneOrigin =  [1,5,3,4,2,8,6,7,9,10], printer = True, plotter = False):
+def main(geneOrigin =  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9], printer = True, plotter = False):
 
-    function = 4 # The costfunction used!
+    function = 5 # The costfunction used!
     stop = 30 # Stop after this many solutions are found
 
     geneLength = len(geneOrigin)
@@ -69,7 +69,7 @@ def main(geneOrigin =  [1,5,3,4,2,8,6,7,9,10], printer = True, plotter = False):
             # print(key)
             # check if child is the solution
             if child == solution:
-                priority = cost(function, child)
+                # priority = cost(function, child)
                 # genes.put((priority, child))
                 key = ".".join((key, str(solnum))) # Remember which solution this was in the library
                 print("sol {:<3}: level:  {},  mutation: {}".format(solnum, level, i))
