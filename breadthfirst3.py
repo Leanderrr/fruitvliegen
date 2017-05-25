@@ -81,7 +81,7 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
                     key = ".".join((key, str(solnum))) # Remember which solution this was in the library
                     print("sol {:<3}: level:  {}".format(solnum, level))
                     print(len(genes))
-                    archive[key] = [level, i, priority]
+                    archive[key] = [level, i, priority, mutsum]
 
                     thissol = solution[:]
                     thissol.extend([solnum])

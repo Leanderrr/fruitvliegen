@@ -23,13 +23,13 @@ def cost(function, padding, gene, mutsum=0, functionmut=False, mutation=0, mut=F
     else:
         genome = gene[:]
 
+    if mut != False:
+        mutsum += mut.length[mutation]
 
-    # Cost function for mutation
-    if functionmut == 1:
-        scoremut += mut.length[mutation]
-    elif functionmut == 2:
-        scoremut += 1/2 * pow(mut.length[mutation], 2)
-    mutsum += scoremut
+        if functionmut == 1:
+            scoremut = mutsum
+        elif functionmut == 2:
+            scoremut += 1/2 * pow(mut.length[mutation], 2)
 
     # Cost function for genome sequences
     if function == 1:
@@ -107,7 +107,6 @@ def cost(function, padding, gene, mutsum=0, functionmut=False, mutation=0, mut=F
             scoreseq += pow(abs(genome[i] - genome[i + 1]), 2)
 
 
-
     elif function == 6:
         """
         Score calculated by counting the number of elements which are already sorted
@@ -136,8 +135,8 @@ def cost(function, padding, gene, mutsum=0, functionmut=False, mutation=0, mut=F
         for i in range(1, len(genome)):
             scoreseq += abs(genome[i] - i)
 
-    if mutsum != 0:
-        score = scoreseq + mutsum
+    if scoremut != 0:
+        score = scoreseq - (scoremut / (scoreseq+1))
     else:
         score = scoreseq
 

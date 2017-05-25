@@ -23,11 +23,11 @@ import time
 #  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9] # Official sequency
 def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9], printer = True, plotter = True):
 
-    functionseq = 5 # The costfunction to calculate cost for the genome sequence
-    functionmut = 0 # The costfunction that calculates the cost of the mutation done on the genome
+    functionseq = 4 # The costfunction to calculate cost for the genome sequence
+    functionmut = 1 # The costfunction that calculates the cost of the mutation done on the genome
 
     padding = True # Padding for the costfunction
-    stop = 1000 # Stop after this many solutions are found
+    stop = 10 # Stop after this many solutions are found
     prunelevel = 25
 
     # Create solution array
