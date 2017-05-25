@@ -19,9 +19,10 @@ def traceMutations(archive, mut, genelen, geneOrigin, solution):
         - solution: The solution, which should be in the archive (Starting point of search)(a list of numbers)
 
     output:
-        - A mutationtracker! (list of mutation indexes)
+        - genes: The genomes. A list of lists
+        - mutationTracker: A mutationtracker! (list of mutation indexes)
+        - costs: The saved cost of the sequences
         - levels: (A list with the depth-level of the genomes found by the search (should be sequential numbers))
-
     """
 
     # Start searching from solution
@@ -35,7 +36,10 @@ def traceMutations(archive, mut, genelen, geneOrigin, solution):
 
     genes = [solution[:]]
     mutationTrack = []
+    costs = [0]
+    mutsum = [0]
     levels = []
+
     while True:
         # Find mutation and gene sequence for this key, use information to go to the next
         level = archive[key][0]
@@ -49,10 +53,12 @@ def traceMutations(archive, mut, genelen, geneOrigin, solution):
         # print("level: {}".format(level))
         genes.insert(0, gene[:])
         mutationTrack.insert(0, mutation)
+        costs.insert(0, archive[key][2])
+        mutsum.insert(0, archive[key][3])
         levels.insert(0, level)
 
         if key == geneOrigin:
             # Gene origin is found
             break
 
-    return genes, mutationTrack, levels
+    return genes, mutationTrack, costs, mutsum, levels

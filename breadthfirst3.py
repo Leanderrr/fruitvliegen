@@ -23,9 +23,10 @@ import time
 #  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9] # Official sequency
 def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9], printer = True, plotter = True):
 
-    function = 0 # The costfunction used!
+    function = 1 # The costfunction used!
+
     padding = True # Padding for the costfunction
-    stop = 1 # Stop after this many solutions are found
+    stop = 1000 # Stop after this many solutions are found
     prunelevel = 25
     geneLength = len(geneOrigin)
     genes = []
@@ -46,7 +47,8 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
     archive = dict()
     solnum = 0
     key = ".".join(str(x) for x in geneOrigin)
-    archive[key] = [0] # The value is the depth level of this gene sequence
+    priority, __ = cost(function, padding, geneOrigin)
+    archive[key] = [0,0,priority,0]
     Go = True
     doubleCounter = 0
     tstart = time.time()
@@ -74,7 +76,7 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
 
                 # check if child is the solution
                 if child == solution:
-                    priority = cost(function, padding, child)
+                    priority, __ = cost(function, padding, child)
                     # genes.put((priority, child))
                     key = ".".join((key, str(solnum))) # Remember which solution this was in the library
                     print("sol {:<3}: level:  {}".format(solnum, level))
@@ -83,8 +85,9 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
 
                     thissol = solution[:]
                     thissol.extend([solnum])
-                    __, mutationTrack2, __ = traceMutations(archive, mut, geneLength, geneOrigin, thissol)
-                    print(mutationTrack2)
+                    __, mutationTrack2, costs2, __ = traceMutations(archive, mut, geneLength, geneOrigin, thissol)
+                    print("mutationtracker: {}".format(mutationTrack2))
+                    print("costs:           {}".format(costs2))
 
                     solnum += 1
                     prunelevel = level
@@ -98,12 +101,16 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
 
                 # child is not the solution nor in archive - so should be added to the end of the queue and archive
                 else:
-                    priority = cost(function, padding, child)
+                    priority, __ = cost(function, padding, child)
                     heappush(genes, (priority, child))
                     archive[key] = [level, i, priority]
 
             # Remove a part of the queue
-            del genes[int(len(genes)-(len(genes)/8))::]
+            cutat = 5000 # Cut at x many genes
+            if len(genes)>cutat:
+                cut = len(genes)-cutat
+                del genes[-cut::]
+
             heapify(genes)
 
 
@@ -119,7 +126,7 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
         solutioni = solution[:]
         solutioni.extend([i])
 
-        genes, mutationTrack, levels = traceMutations(archive, mut, geneLength, geneOrigin, solutioni)
+        genes, mutationTrack, costs, levels = traceMutations(archive, mut, geneLength, geneOrigin, solutioni)
         print("{:<3}. mutation tracker: {}".format(i, mutationTrack))
 
         if plotter == True:
