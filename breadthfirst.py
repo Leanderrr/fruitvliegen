@@ -38,6 +38,7 @@ def traceMutations(archive, mut, genelen, geneOrigin, solution):
     mutationTrack = []
     costs = [0]
     mutsum = [0]
+    mutsum2 = [0]
     levels = []
 
     while True:
@@ -55,10 +56,11 @@ def traceMutations(archive, mut, genelen, geneOrigin, solution):
         mutationTrack.insert(0, mutation)
         costs.insert(0, archive[key][2])
         mutsum.insert(0, archive[key][3])
+        mutsum2.insert(0, archive[key][4])
         levels.insert(0, level)
 
         if key == geneOrigin:
             # Gene origin is found
             break
 
-    return genes, mutationTrack, costs, mutsum, levels
+    return genes, mutationTrack, costs, mutsum, mutsum2, levels
