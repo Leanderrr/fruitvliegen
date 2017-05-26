@@ -7,7 +7,7 @@ Nina
 2017-5-16
 """
 
-def cost(function, padding, gene, mutsum=0, functionmut=False, mutation=0, mut=False):
+def cost(function, padding, gene, mutsum=0, functionmut=False, mutation=0, mut=False, level=0):
     """
     input: function: Selection of which function should be used
            function2: Select
@@ -29,6 +29,10 @@ def cost(function, padding, gene, mutsum=0, functionmut=False, mutation=0, mut=F
         if functionmut == 1:
             scoremut = mutsum
         elif functionmut == 2:
+            scoremut = mutsum/level
+        elif functionmut == 3:
+            scoremut = mutsum/level + mut.length[mutation]/4 + level/5
+        elif functionmut == 4:
             scoremut += 1/2 * pow(mut.length[mutation], 2)
 
     # Cost function for genome sequences
@@ -63,13 +67,11 @@ def cost(function, padding, gene, mutsum=0, functionmut=False, mutation=0, mut=F
         maxscore = sum(genome) - len(genome)
         # calculate score
         for i in range(0, len(genome) - 1):
-
-            if genome[i] == genome[i + 1] + 1 or genome[i] == genome[i + 1] - 1:
+            if abs(genome[i] - genome[i + 1]) == 1:
                 scoreseq += repeat
                 repeat += 1
 
             else:
-                scoreseq += 0
                 repeat = 1
 
         # converts score to priority
@@ -136,7 +138,7 @@ def cost(function, padding, gene, mutsum=0, functionmut=False, mutation=0, mut=F
             scoreseq += abs(genome[i] - i)
 
     if scoremut != 0:
-        score = scoreseq - (scoremut / (scoreseq+1))
+        score = scoreseq + scoremut/3
     else:
         score = scoreseq
 

@@ -23,12 +23,12 @@ import time
 #  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9] # Official sequency
 def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9], printer = True, plotter = True):
 
-    functionseq = 4 # The costfunction to calculate cost for the genome sequence
-    functionmut = 1 # The costfunction that calculates the cost of the mutation done on the genome
+    functionseq = 3 # The costfunction to calculate cost for the genome sequence
+    functionmut = 3 # The costfunction that calculates the cost of the mutation done on the genome
 
     padding = True # Padding for the costfunction
     stop = 10 # Stop after this many solutions are found
-    prunelevel = 25
+    prunelevel = 30
 
     # Create solution array
     geneLength = len(geneOrigin)
@@ -54,7 +54,7 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
     Go = True
     doubleCounter = 0
     tstart = time.time()
-
+    j =0
     while (not len(genes)==0) and (Go == True):
         # stap 1: Alle mogelijke kinderen maken en opslaan - checken of een van de kinderen de oplossing is. (dat is een grote stap)
 
@@ -63,15 +63,22 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
         motherkey = ".".join(str(x) for x in mother)
         level = archive[motherkey][0] + 1
         mutsum = archive[motherkey][3]
+        j+=1
+        if j%100==0:
+            print('{} level {}'.format(j, level))
+            print('{} mutsum {}'. format(j, mutsum))
 
         if level > prunelevel:
+            heappop(genes)
+
+        if mutsum > 75:
             heappop(genes)
 
         else:
             # print(archive[motherkey])
 
             # mutate the child - add to queue if not already in archive nor solution of the problem
-            for i in range(0, mut.max):
+            for i in range(0, mut.max - 10):
                 child = mother[:]
                 mutsum = archive[motherkey][3]
                 child[mut.start[i]:mut.end[i]] = child[mut.start[i]:mut.end[i]][::-1]
@@ -80,7 +87,7 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
 
                 # check if child is the solution
                 if child == solution:
-                    priority, mutsum = cost(functionseq, padding, child, mutsum, functionmut, i, mut)
+                    priority, mutsum = cost(functionseq, padding, child, mutsum, functionmut, i, mut, level)
                     key = ".".join((key, str(solnum))) # Remember which solution this was in the library
                     print("sol {:<3}: level:  {}".format(solnum, level))
                     print(len(genes))
@@ -107,7 +114,7 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
 
                 # child is not the solution nor in archive - so should be added to the end of the queue and archive
                 else:
-                    priority, mutsum = cost(functionseq, padding, child, mutsum, functionmut, i, mut)
+                    priority, mutsum = cost(functionseq, padding, child, mutsum, functionmut, i, mut, level)
                     heappush(genes, (priority, child))
                     archive[key] = [level, i, priority, mutsum]
 
