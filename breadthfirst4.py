@@ -14,19 +14,24 @@ started: 2017-5-15
 
 from mutations import mutationlist
 from breadthfirst import traceMutations
+from breadthfirst import prioritycleanup
+from breadthfirst import stepbackcleanup
 from heapq import *
 from depthfirst import plotMutations
 from cost import cost
 import time
+import random
 
-# [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12, 5, 6, 17, 20] # Fonsos sequentie
 #  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9] # Official sequency
-def main(geneOrigin=False, functionseq=1, functionmut=1, padding=True, stop=1, printer = True, plotter = True):
+def main(geneOrigin=False, functionseq=1, functionmut=0, padding=True, stop=100, printer = True, plotter = True):
     if isinstance(geneOrigin, bool):
-        geneOrigin = [1, 2, 11, 19, 6, 10, 7, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 3, 4, 9]
+        geneOrigin = [1, 2, 11, 19, 6, 10, 7, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9]
+        random.shuffle(geneOrigin)
 
-    prunelevel = len(geneOrigin)/1.5
-
+    # geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9]
+    prunelevel = len(geneOrigin)
+    mutsummax = 200
+    print(geneOrigin)
     # Create solution array
     geneLength = len(geneOrigin)
     solution = []
@@ -39,15 +44,17 @@ def main(geneOrigin=False, functionseq=1, functionmut=1, padding=True, stop=1, p
     # print("max mutations for this genome: {}".format(mut.max))
     genes = []
     priority, __, __ = cost(functionseq, padding, geneOrigin)
+    level = 0
     # print("priority = {}".format(priority))
-    heappush(genes, (priority, geneOrigin))
+    heappush(genes, (priority, geneOrigin, level))
 
-
-    # Breadth First Search
+    # Best First Search
     archive = dict()
     solnum = 0
     key = ".".join(str(x) for x in geneOrigin)
-    archive[key] = [0, 0, 0, 0,0] # 1st value: deth level, 2nd value: last mutation, 3th value: priority, 4th value: sum of mutations
+
+    priority, __, __ = cost(functionseq, padding, geneOrigin)
+    archive[key] = [level, 0, priority, 0,0] # 1st value: deth level, 2nd value: last mutation, 3th value: priority, 4th value: sum of mutations
     Go = True
     doubleCounter = 0
     tstart = time.time()
@@ -55,13 +62,14 @@ def main(geneOrigin=False, functionseq=1, functionmut=1, padding=True, stop=1, p
     while (not len(genes)==0) and (Go == True):
         # stap 1: Alle mogelijke kinderen maken en opslaan - checken of een van de kinderen de oplossing is. (dat is een grote stap)
 
-        priority, mother = heappop(genes)
+        priority, mother, level = heappop(genes)
         #print("mother = {}".format(mother))
         motherkey = ".".join(str(x) for x in mother)
-        level = archive[motherkey][0] + 1
 
+        level += 1
+        mutsum = archive[motherkey][3]
 
-        if level > prunelevel:
+        if level > prunelevel+2 or mutsum >= mutsummax :
             heappop(genes)
 
         else:
@@ -86,39 +94,46 @@ def main(geneOrigin=False, functionseq=1, functionmut=1, padding=True, stop=1, p
                     thissol = solution[:]
                     thissol.extend([solnum])
                     genesT, mutationTrackT, costsT, mutsumT, mutsum2T, __ = traceMutations(archive, mut, geneLength, geneOrigin, thissol)
-                    print("mutationtracker: {}".format(mutationTrackT))
-                    print("costs:           {}".format(costsT[-1]))
-                    print("mutsums          {}".format(mutsumT[-1]))
-                    print("mutsums2         {}".format(mutsum2T[-1]))
+                    print("mutationtracker:{}".format(mutationTrackT))
+                    print("cost:           {}".format(costsT[-1]))
+                    print("mutsum          {}".format(mutsumT[-1]))
+                    print("mutsum2         {}".format(mutsum2T[-1]))
 
                     # plotMutations(genesT, mutationTrackT, mut)
 
+                    stepbackcleanup(genes, level, 4)
+                    prioritycleanup(genes, level)
+
                     solnum += 1
-                    # prunelevel = level - 1
+                    prunelevel = level
+                    mutsummax = mutsum+1
                     if solnum == stop:
                         Go = False
 
                 # check if child is already in the archive - if so don't add this child to the queue
-                elif (archive.get(key, False) != False) and archive.get(key, 100)[0] < level:
+                elif (archive.get(key, False) != False) and (archive.get(key, 100)[0] < level):
                     # print("earlier level {}, current level {}".format((archive.get(key, False)[0]), level))
                     doubleCounter += 1
-
-                elif mutsum2 > 240:
-                    heappop(genes)
 
                 # child is not the solution nor in archive - so should be added to the end of the queue and archive
                 else:
                     priority, mutsum, mutsum2 = cost(functionseq, padding, child, mutsum, mutsum2, functionmut, i, mut, level)
-                    heappush(genes, (priority, child))
+                    heappush(genes, (priority, child, level))
                     archive[key] = [level, i, priority, mutsum, mutsum2]
 
-            # Remove a part of the queue
-            cutat = 10000 # Cut at x many genes
-            if len(genes)>cutat:
-                cut = len(genes)-cutat
-                del genes[-cut::]
+            # Pruning that keeps low levels
+            if len(genes) > 750000:
+                prioritycleanup(genes, prunelevel)
+                # print(len(genes))
 
-            heapify(genes)
+            # Pruning that throws away low levels, and thus cannot dramatically change its route after some time
+            # Remove a part of the queue
+            # cutat = 10000 # Cut at x many genes
+            # if len(genes)>cutat:
+            #     cut = len(genes)-cutat
+            #     del genes[-cut::]
+            #
+            # heapify(genes)
 
 
     tduration = time.time() - tstart
@@ -142,6 +157,8 @@ def main(geneOrigin=False, functionseq=1, functionmut=1, padding=True, stop=1, p
 
         if plotter == True:
             plotMutations(genes, mutationTrack, mut)
+
+    return mutsum[-1], mutsum2[-1], levels[-1], costs[1], tduration
 
 
 if __name__ == '__main__':

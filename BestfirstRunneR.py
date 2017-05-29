@@ -8,13 +8,15 @@ Leander
 
 from breadthfirst4 import main as bestfirst
 from random import shuffle
+import numpy
 
+# Settings to run best first algorithm with
 functionseq = 1
-functionmut = 3
+functionmut = 2
 padding = True
-stop = 1
+stop = 10
 genelength = 25
-printer = False
+printer = True
 plotter = False
 genome = []
 for gene in range(1, genelength+1):
@@ -22,7 +24,33 @@ for gene in range(1, genelength+1):
 
 nruns = 100
 
+# The output variables
+mutsums = []
+mutsums2 = []
+levels = []
+times = []
+costs = []
+
+# Performing the runs with randomized genomes of requested length
 for i in range(0, nruns):
     shuffle(genome)
-    print("\ngenome to sequence: {}".format(genome))
-    bestfirst(genome, functionseq, functionmut, padding, stop, printer, plotter)
+    print("\nRun {}: genome to sequence: {}".format(i, genome))
+
+    # Call bestfirst algorithm
+    mutsum, mutsum2, level, cost, time = bestfirst(genome, functionseq, functionmut, padding, stop, printer, plotter)
+
+    # Saving output
+    mutsums.append(mutsum)
+    mutsums2.append(mutsum2)
+    levels.append(level)
+    times.append(time)
+    costs.append(cost)
+
+# Printing results
+print("\n\nAveraged results: ")
+print("average mutsum:  {}".format(numpy.mean(mutsums)))
+print("average mutsum2: {}".format(numpy.mean(mutsums2)))
+print("average levels:  {} deep".format(numpy.mean(levels)))
+print("average start cost:{}".format(numpy.mean(costs)))
+print("average runtime: {} sec".format(numpy.mean(times)))
+

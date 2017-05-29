@@ -32,10 +32,13 @@ def cost(function, padding, gene, mutsum=0, mutsum2=0, functionmut=False, mutati
             scoremut = mutsum/level
         elif functionmut == 3:
             scoremut = mutsum/level + mut.length[mutation]/3 + level/5
+            scoremut /= 10
         elif functionmut == 4:
             scoremut = mutsum2/level
             scoremut += 1 / 2 * pow(mut.length[mutation], 2)/5 + level/3
             scoremut /= 15
+        elif functionmut == 5:
+            scoremut = level/5
 
         mutsum2 += 1 / 2 * pow(mut.length[mutation], 2)
 

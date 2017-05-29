@@ -5,7 +5,73 @@ Nina
 
 2017-5-16
 """
+import numpy as np
+import time
 
+def stepbackcleanup(genes, sollevel, throw):
+    """
+    This is a genome queue cleanup function, which throws away all genomes above 'throw' levels below the sollevel depth
+    :param genes: A priorityQue which holds all genomes
+    :param archive: A dictionary with extra information about the genomes
+    :param sollevel: integer, The depth level of
+    :return: updated genomes, deleted all genomes in upper 3 depth levels
+    """
+    i = len(genes) - 1
+    while i >= 0:
+        __, __, level = genes[i]
+        if level > sollevel - throw:
+            del genes[i]
+        i -= 1
+
+def prioritycleanup(genes, sollevel):
+    """
+    This function throws away a lot of genomes to make room in the memory and speed up the searching process.
+    It throws away based on whether certain genomes are worse than average according to their depth level,
+    but with added linear function it keeps genomes of low depth levels, this enables the search tree to go far back,
+    which can enable better solutions
+
+    :param genes: A priorityQue which holds all genomes
+    :param archive: A dictionary with extra information about the genomes
+    :param sollevel: integer, The depth level of the last solution, or the desired solution depth level
+
+    :return (implicitly): updated genomes, deleted worse than average genomes, but biasing for low depth level
+
+    """
+
+
+    # Get the average priority of genomes per depth level
+    meanPriorities = []
+    allPriorities = []# This might be quite a killer
+
+    for i in range(0, sollevel+2):
+        allPriorities.append([])
+
+    for i in range(len(genes)):
+        priority, __,  level = genes[i]
+        allPriorities[level-1].append(priority)
+
+    for i in range(len(allPriorities)):
+        # print(len(allPriorities[i]))
+        if allPriorities[i]:
+            # The added linearity favors low depth, keeping their best forever
+            # -0.01x + 0.125 causes the first halve of 25genomes to be cut above the average score, and the deeper halve below average
+            meani = np.mean(allPriorities[i]) - 0.01 * i + 0.125
+            meanPriorities.append(meani)
+
+    # print('meanPriorities')
+    # print(meanPriorities)
+    # print('\n')
+
+    # Killing all above average priority genomes
+    i = len(genes)-1
+
+    while i >= 0:
+        priority, __, level = genes[i]
+        if level>len(meanPriorities):
+            del genes[i]
+        elif priority > meanPriorities[level-1]:
+            del genes[i]
+        i -= 1
 
 def traceMutations(archive, mut, genelen, geneOrigin, solution):
     """
