@@ -89,11 +89,11 @@ def cost(function, padding, gene, mutsum=0, mutsum2=0, functionmut=False, mutati
         repeat = 1
         maxscore = 0
 
-        for i in range(0, len(genome) - 1):
+        for i in range(1, len(genome)):
 
-            maxscore += pow([i+1], 2)
+            maxscore += pow(i, 2)
 
-            if genome[i] == genome[i + 1] + 1 or genome[i] == genome[i + 1] - 1:
+            if abs(genome[i-1] - genome[i]) == 1:
                 scoreseq += pow(repeat, 2)
                 repeat += 1
 
@@ -122,7 +122,7 @@ def cost(function, padding, gene, mutsum=0, mutsum2=0, functionmut=False, mutati
         maxscore = 0
 
         for i in range(0, len(genome) - 1):
-            maxscore += pow([i+1],3)
+            maxscore += pow((i+1),3)
 
             if genome[i] == genome[i + 1] + 1 or genome[i] == genome[i + 1] - 1:
                 scoreseq += pow(repeat, 3)

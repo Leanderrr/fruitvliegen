@@ -34,17 +34,26 @@ def traceMutations(archive, mut, genelen, geneOrigin, solution):
     # Search untill geneOrigin is found
     geneOrigin = ".".join(str(x) for x in geneOrigin)
 
-    genes = [solution[:]]
+    genes = []
     mutationTrack = []
-    costs = [0]
-    mutsum = [0]
-    mutsum2 = [0]
+    costs = []
+    mutsum = []
+    mutsum2 = []
     levels = []
 
     while True:
         # Find mutation and gene sequence for this key, use information to go to the next
+
         level = archive[key][0]
         mutation = archive[key][1]
+
+        genes.insert(0, gene[:])
+        mutationTrack.insert(0, mutation)
+        levels.insert(0, level)
+        costs.insert(0, archive[key][2])
+        mutsum.insert(0, archive[key][3])
+        mutsum2.insert(0, archive[key][4])
+
 
         # Retrace the gene created by this mutation and use it as new key
         gene[mut.start[mutation]:mut.end[mutation]] = gene[mut.start[mutation]:mut.end[mutation]][::-1]
@@ -52,15 +61,12 @@ def traceMutations(archive, mut, genelen, geneOrigin, solution):
         # print("key: {}".format(key))
         # print("mutation: {}".format(mutation))
         # print("level: {}".format(level))
-        genes.insert(0, gene[:])
-        mutationTrack.insert(0, mutation)
-        costs.insert(0, archive[key][2])
-        mutsum.insert(0, archive[key][3])
-        mutsum2.insert(0, archive[key][4])
-        levels.insert(0, level)
+
 
         if key == geneOrigin:
             # Gene origin is found
+            genes.insert(0, gene[:])
+            costs.insert(0, archive[key][2])
             break
 
     return genes, mutationTrack, costs, mutsum, mutsum2, levels

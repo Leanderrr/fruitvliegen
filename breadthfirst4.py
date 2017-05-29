@@ -21,14 +21,11 @@ import time
 
 # [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12, 5, 6, 17, 20] # Fonsos sequentie
 #  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9] # Official sequency
-def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9], printer = True, plotter = True):
+def main(geneOrigin=False, functionseq=1, functionmut=1, padding=True, stop=1, printer = True, plotter = True):
+    if isinstance(geneOrigin, bool):
+        geneOrigin = [1, 2, 11, 19, 6, 10, 7, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 3, 4, 9]
 
-    functionseq = 1 # The costfunction to calculate cost for the genome sequence
-    functionmut = 4 # The costfunction that calculates the cost of the mutation done on the genome
-    padding = True # Padding for the costfunction
-
-    stop = 50 # Stop after this many solutions are found
-    prunelevel = 60
+    prunelevel = len(geneOrigin)/1.5
 
     # Create solution array
     geneLength = len(geneOrigin)
@@ -62,7 +59,7 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
         #print("mother = {}".format(mother))
         motherkey = ".".join(str(x) for x in mother)
         level = archive[motherkey][0] + 1
-        mutsum = archive[motherkey][3]
+
 
         if level > prunelevel:
             heappop(genes)
@@ -71,7 +68,7 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
             # print(archive[motherkey])
 
             # mutate the child - add to queue if not already in archive nor solution of the problem
-            for i in range(0, mut.max - 36):
+            for i in range(0, mut.max):
                 child = mother[:]
                 mutsum = archive[motherkey][3]
                 mutsum2 = archive[motherkey][4]
@@ -84,16 +81,15 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
                     priority, mutsum, mutsum2 = cost(functionseq, padding, child, mutsum, mutsum2, functionmut, i, mut, level)
                     key = ".".join((key, str(solnum))) # Remember which solution this was in the library
                     print("sol {:<3}: level:  {}".format(solnum, level))
-                    print(len(genes))
                     archive[key] = [level, i, priority, mutsum, mutsum2]
 
                     thissol = solution[:]
                     thissol.extend([solnum])
                     genesT, mutationTrackT, costsT, mutsumT, mutsum2T, __ = traceMutations(archive, mut, geneLength, geneOrigin, thissol)
                     print("mutationtracker: {}".format(mutationTrackT))
-                    print("costs:           {}".format(costsT))
-                    print("mutsums          {}".format(mutsumT))
-                    print("mutsums2         {}".format(mutsum2T))
+                    print("costs:           {}".format(costsT[-1]))
+                    print("mutsums          {}".format(mutsumT[-1]))
+                    print("mutsums2         {}".format(mutsum2T[-1]))
 
                     # plotMutations(genesT, mutationTrackT, mut)
 
@@ -126,7 +122,7 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
 
 
     tduration = time.time() - tstart
-    print("{0:.3f}".format(tduration))
+    print("duration: {0:.3f} sec".format(tduration))
 
     if printer == True:
         print('number of genomes in archive: {}'.format(len(archive)))
@@ -138,7 +134,11 @@ def main(geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12,
         solutioni.extend([i])
 
         genes, mutationTrack, costs, mutsum, mutsum2, levels = traceMutations(archive, mut, geneLength, geneOrigin, solutioni)
-        print("{:<3}. mutation tracker: {}".format(i, mutationTrack))
+        if printer == True:
+            print("{:<2} mutations: {}".format(i, mutationTrack))
+            print("{:<2} costs:     {}".format(i, costs))
+            print("{:<2} mutsums:   {}".format(i, mutsum))
+            print("{:<2} mutsums2:  {}".format(i, mutsum2))
 
         if plotter == True:
             plotMutations(genes, mutationTrack, mut)
