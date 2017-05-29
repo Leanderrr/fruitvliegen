@@ -42,7 +42,7 @@ def cost(function, padding, gene, mutsum=0, mutsum2=0, functionmut=False, mutati
     # Cost function for genome sequences
     if function == 1:
         """
-
+        Adds 1 to the score when a number is not adjacent to a number it should be adjacent to
         """
         for i in range (0, len(genome)-1):
 
@@ -55,7 +55,7 @@ def cost(function, padding, gene, mutsum=0, mutsum2=0, functionmut=False, mutati
 
     elif function == 2:
         """
-        Adds 1 to the score when a number is not adjacent to a number it should be adjacent to
+        Adds the difference between two adjacent numbers to the score
         """
         # calculate score
         for i in range(0, len(genome) - 1):
@@ -87,17 +87,18 @@ def cost(function, padding, gene, mutsum=0, mutsum2=0, functionmut=False, mutati
         Look for sequentially correct numbers, add more (with exponent) every time it's correct
         """
         repeat = 1
+        maxscore = 0
 
-        maxscore = sum(genome) - len(genome)
         for i in range(0, len(genome) - 1):
+
+            maxscore += pow([i+1], 2)
 
             if genome[i] == genome[i + 1] + 1 or genome[i] == genome[i + 1] - 1:
                 scoreseq += pow(repeat, 2)
                 repeat += 1
 
             else:
-                scoreseq += 0
-                repeat = 1
+               repeat = 1
 
         # converts score to priority
         scoreseq = maxscore / scoreseq
@@ -118,9 +119,10 @@ def cost(function, padding, gene, mutsum=0, mutsum2=0, functionmut=False, mutati
         Score calculated by counting the number of elements which are already sorted
         """
         repeat = 1
+        maxscore = 0
 
-        maxscore = sum(genome) - len(genome)
         for i in range(0, len(genome) - 1):
+            maxscore += pow([i+1],3)
 
             if genome[i] == genome[i + 1] + 1 or genome[i] == genome[i + 1] - 1:
                 scoreseq += pow(repeat, 3)
