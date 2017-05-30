@@ -6,6 +6,9 @@ First 'algorithm' to get the genome of the Miranda from the genome of Melanogast
 Leander de Kraker
 """
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+from matplotlib import cm
+from numpy import linspace
 import time
 
 def main(geneOrigin = [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12, 5, 6, 17, 20], plot = True, printer = True):
@@ -52,20 +55,49 @@ def main(geneOrigin = [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12,
 
     # Figure showing mutations
     if plot == True:
-        fig = plt.figure(figsize=(10,15))
-        plt.title("mutation sequence")
-        ax = fig.add_subplot(111)
-        for i in range(len(genes)):
-            for j in range(len(genes[i])):
-                ax.text(j/4, i, '{},'.format(genes[i][j]))
+        cm_subsection = linspace(0, 1, len(genes[0]) + 2)
+        colors = [cm.summer(x) for x in cm_subsection]
+        colors2 = [cm.Reds(x) for x in cm_subsection]
 
+        fig = plt.figure(figsize=(10, 15))
+        ax = fig.add_subplot(111)
+
+        y = 0
+        for genome in genes:
+            # Print genome text in figure
+            # score = costfunction.main(genome)
+            x = 0
+            for gen in genome:
+                ax.text(x, y, '{}, '.format(gen))
+                # Add colored rectangle showing gen value height
+                ax.add_patch(patches.Rectangle(
+                    (x - 0.05, y - 0.1), 0.25, 1,
+                    facecolor=(colors[gen][0], colors[gen][1], colors[gen][2], 0.7),
+                    edgecolor="none"))
+                x += 1 / 4
+            y += 1
+
+        # Diagonal lines!
         for i in range(len(flips)):
-            ax.plot([(flips[i][0]+0.5)/4, (flips[i][1]-0.5)/4], [i+0.3, i+0.9], color='g')
-            ax.plot([(flips[i][0]+0.5)/4, (flips[i][1]-0.5)/4], [i+0.9, i+0.3], color='g')
+            x1 = (flips[i][0]+0.5) / 4 - 0.05
+            x2 = (flips[i][1]-0.5) / 4 - 0.05
+            y1 = i + 0.8
+            y2 = i + 0.9
+            ax.plot([x1, x2], [y1, y2], color=colors2[flips[i][1]-flips[i][0]])
+            ax.plot([x1, x2], [y2, y1], color=colors2[flips[i][1]-flips[i][0]])
 
         plt.ylabel("mutation (n)")
-        ax.axis([-0.5, 7, -0.5, len(genes)])
+        plt.xlabel("genome sequence")
+        plt.title("mutation sequence. nr of mutations = {}".format(len(flips)))
+        plt.tick_params(
+            axis='x',
+            which='both',  # both major and minor ticks are affected
+            bottom='off',  # ticks along the bottom edge are off
+            top='off',  # ticks along the top edge are off
+            labelbottom='off')  # labels along the bottom edge are off
+        ax.axis([-0.05, len(genes[0]) / 4, -0.1, len(genes)])
         plt.show()
+
 
 if __name__ == "__main__":
     main()
