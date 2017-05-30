@@ -14,7 +14,7 @@ import numpy
 functionseq = 1
 functionmut = 3
 padding = True
-stop = 15
+stop = 10
 genelength = 25
 printer = False
 plotter = False

@@ -134,8 +134,8 @@ def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=11, 
             if len(genes) > 10000:
                 prioritycleanup(genes, prunelevel)
                 # print(len(genes))
-                # if time.time() - tstart > 60:
-                #     Go = False
+                if time.time() - tstart > 30:
+                    Go = False
 
 
             # Pruning that throws away low levels, and thus cannot dramatically change its route after some time
