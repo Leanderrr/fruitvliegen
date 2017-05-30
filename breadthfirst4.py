@@ -23,12 +23,21 @@ import time
 import random
 
 #  [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9] # Official sequency
-def main(geneOrigin=False, functionseq=1, functionmut=0, padding=True, stop=15, printer = True, plotter = True):
+def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=11, printer = True, plotter = True):
+    """
+    :param geneOrigin: The sequence of genes to start with
+    :param functionseq: The sequence cost function (select it with an integer)
+    :param functionmut: The mutation cost function (select it with an integer)
+    :param padding: Activate padding around the genome sequence for the costfunction (True or False)
+    :param stop: Stop after this many solutions are found (integer)
+    :param printer: Activates more printed output (True or False)
+    :param plotter: Activated the plots! Only when the program stops, one at a time (True or False)
+    :return:
+    """
     if isinstance(geneOrigin, bool):
         geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9]
-        random.shuffle(geneOrigin)
+        # random.shuffle(geneOrigin)
 
-    # geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9]
     prunelevel = len(geneOrigin)
     mutsummax = 200 # Sum of mutation lengts max, if exceeded, genes get pruned
     # Create solution array
@@ -71,7 +80,6 @@ def main(geneOrigin=False, functionseq=1, functionmut=0, padding=True, stop=15, 
             heappop(genes)
 
         else:
-            # print(archive[motherkey])
 
             # mutate the child - add to queue if not already in archive nor solution of the problem
             for i in range(0, mut.max):
@@ -80,7 +88,6 @@ def main(geneOrigin=False, functionseq=1, functionmut=0, padding=True, stop=15, 
                 mutsum2 = archive[motherkey][4]
                 child[mut.start[i]:mut.end[i]] = child[mut.start[i]:mut.end[i]][::-1]
                 key = ".".join(str(x) for x in child)
-                # print(key)
 
                 # check if child is the solution
                 if child == solution:
@@ -102,8 +109,8 @@ def main(geneOrigin=False, functionseq=1, functionmut=0, padding=True, stop=15, 
                     # plotMutations(genesT, mutationTrackT, mut)
 
                     # Delete a part of the genome queue
-                    stepbackcleanup(genes, level, 4)
-                    # prioritycleanup(genes, level)
+                    stepbackcleanup(genes, level, 7)
+                    prioritycleanup(genes, level)
 
                     solnum += 1
                     prunelevel = level
@@ -113,7 +120,7 @@ def main(geneOrigin=False, functionseq=1, functionmut=0, padding=True, stop=15, 
                         Go = False
 
                 # check if child is already in the archive - if so don't add this child to the queue
-                elif (archive.get(key, False) != False) and (archive.get(key, 100)[0] < level):
+                elif (archive.get(key, False) != False) and (archive.get(key, 100)[0] <= level):
                     # print("earlier level {}, current level {}".format((archive.get(key, False)[0]), level))
                     doubleCounter += 1
 
@@ -124,12 +131,12 @@ def main(geneOrigin=False, functionseq=1, functionmut=0, padding=True, stop=15, 
                     archive[key] = [level, i, priority, mutsum, mutsum2]
 
             # Pruning that keeps low levels
-            if len(genes) > 500000:
+            if len(genes) > 10000:
                 prioritycleanup(genes, prunelevel)
-
-                if time.time() - tstart > 600:
-                    Go = False
                 # print(len(genes))
+                # if time.time() - tstart > 60:
+                #     Go = False
+
 
             # Pruning that throws away low levels, and thus cannot dramatically change its route after some time
             # Remove a part of the queue
@@ -150,7 +157,7 @@ def main(geneOrigin=False, functionseq=1, functionmut=0, padding=True, stop=15, 
 
     minmutsum = 1000
     minmutsum2 = 1000
-    minlevel = 25
+    minlevel = 100
     # Retrace which mutations were done to get the solutions
     for i in range(0, solnum):
         solutioni = solution[:]
@@ -174,7 +181,7 @@ def main(geneOrigin=False, functionseq=1, functionmut=0, padding=True, stop=15, 
 
         if levels[-1] < minlevel:
             minlevel = levels[-1]
-            outcosts = costs
+            outcosts = costs[1]
             outmutation2 = mutationTrack
             solutionN = i
 

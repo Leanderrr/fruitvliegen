@@ -23,6 +23,7 @@ def stepbackcleanup(genes, sollevel, throw):
             del genes[i]
         i -= 1
 
+
 def prioritycleanup(genes, sollevel):
     """
     This function throws away a lot of genomes to make room in the memory and speed up the searching process.
@@ -41,30 +42,27 @@ def prioritycleanup(genes, sollevel):
 
     # Get the average priority of genomes per depth level
     meanPriorities = []
-    allPriorities = []# This might be quite a killer
+    allPriorities = []
 
+    # list with lists to store all priorities
     for i in range(0, sollevel+2):
         allPriorities.append([])
 
+    # Saving all priorities per level
     for i in range(len(genes)):
         priority, __,  level = genes[i]
         allPriorities[level-1].append(priority)
 
+    # Taking the average priority per level
     for i in range(len(allPriorities)):
-        # print(len(allPriorities[i]))
         if allPriorities[i]:
             # The added linearity favors low depth, keeping their best forever
             # -0.01x + 0.125 causes the first halve of 25genomes to be cut above the average score, and the deeper halve below average
             meani = np.mean(allPriorities[i]) - 0.01 * i + 0.125
             meanPriorities.append(meani)
 
-    # print('meanPriorities')
-    # print(meanPriorities)
-    # print('\n')
-
     # Killing all above average priority genomes
     i = len(genes)-1
-
     while i >= 0:
         priority, __, level = genes[i]
         if level>len(meanPriorities):
@@ -73,10 +71,15 @@ def prioritycleanup(genes, sollevel):
             del genes[i]
         i -= 1
 
+
 def traceMutations(archive, mut, genelen, geneOrigin, solution):
     """
-    This function traces back the genomes, from starting genome to the solution.
+    This function traces back the genomes, from the solution to the geneOrigin
     After only the mutation numbers were saved in a dictionary.
+
+    Known limitations: When there were genome sequences which had overlapping parts (same genome and mutation),
+    but on different depth levels, only the path with the lowest depth levels (the best one) can be found;
+    the shorter path has overwritten the longer path.
 
     input args:
         - archive: The dictionary which holds all the genomes that were found by doing mutations.
@@ -97,9 +100,9 @@ def traceMutations(archive, mut, genelen, geneOrigin, solution):
     if len(gene) > genelen:
         gene.pop()
 
-    # Search untill geneOrigin is found
     geneOrigin = ".".join(str(x) for x in geneOrigin)
 
+    # Variables that will be returned
     genes = []
     mutationTrack = []
     costs = []

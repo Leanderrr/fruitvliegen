@@ -12,9 +12,9 @@ import numpy
 
 # Settings to run best first algorithm with
 functionseq = 1
-functionmut = 0
+functionmut = 3
 padding = True
-stop = 20
+stop = 15
 genelength = 25
 printer = False
 plotter = False
@@ -54,14 +54,27 @@ for i in range(0, nruns):
     solutionNs.append(solutionN)
     times.append(time)
 
-sameFrac = sum(sames) / nruns
 # Printing results
+for i in range(0, nruns):
+    print("mutationtracker1: {}".format(mutationTrack1))
+    print("\nresults run {}: ".format(i))
+    print("minimum  mutsum:  {}".format(mutsums[i]))
+    print("minimum  mutsum2: {}".format(mutsums2[i]))
+    print("outcome with min mutsum is same outcome as min mutsum2 {}".format(sames[i]))
+    print("minimum levels:  {} deep".format(levels[i]))
+    print("minimum level found on average in solution: {}".format(solutionNs[i]))
+    print("start cost:{}".format(costs[i]))
+    print("runtime: {} sec".format(times[i]))
+
+
+
+sameFrac = sum(sames) / nruns
 print("\n\nAveraged results: ")
 print("average minimum  mutsum:  {}".format(numpy.mean(mutsums)))
 print("average minimum  mutsum2: {}".format(numpy.mean(mutsums2)))
-print("number of times outcome with min mutsum is same outcome as min mutsum2".format(sameFrac))
+print("portion of times outcome with min mutsum is same outcome as min mutsum2 {}".format(sameFrac))
 print("average minimum levels:  {} deep".format(numpy.mean(levels)))
-print("minimum level found on average in solution: {}".format(numpy.mean(solutionNs)))
+print("minimum level found on average in solution nr: {}".format(numpy.mean(solutionNs)+1))
 print("average start cost:{}".format(numpy.mean(costs)))
 print("average runtime: {} sec".format(numpy.mean(times)))
 
