@@ -6,7 +6,7 @@ Runs the breadthfirst4 script a number of times with different genomes
 Leander
 """
 
-from breadthfirst4 import main as bestfirst
+from bestfirstsearch import main as bestfirst
 from random import shuffle
 import numpy
 

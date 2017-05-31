@@ -1,5 +1,5 @@
 """"
-Cost function used to decide priority in priority queue for BFS
+Cost functions used to decide priority in priority queue for BEST FIRST
 
 Leander
 Nina
@@ -7,11 +7,14 @@ Nina
 2017-5-16
 """
 
-def cost(function, padding, gene, mutsum=0, mutsum2=0, functionmut=False, mutation=0, mut=False, level=0):
+def cost(function, padding, gene, mutsum=0, mutsum2=0, functionmut=False,
+         mutation=0, mut=False, level=0):
+
     """
     input: function: Selection of which function should be used
            function2: Select
     """
+
     scoremut = 0
     scoreseq = 0
 
@@ -45,7 +48,8 @@ def cost(function, padding, gene, mutsum=0, mutsum2=0, functionmut=False, mutati
     # Cost function for genome sequences
     if function == 1:
         """
-        Adds 1 to the score when a number is not adjacent to a number it should be adjacent to
+        Adds 1 to the score when a number is not adjacent to a number 
+        it should be adjacent to
         """
         for i in range (0, len(genome)-1):
 
@@ -67,7 +71,8 @@ def cost(function, padding, gene, mutsum=0, mutsum2=0, functionmut=False, mutati
 
     elif function == 3:
         """
-        Look for sequentially correct numbers, add more to score every time it's correct
+        Look for sequentially correct numbers, add more to score 
+        every time it's correct
         """
         repeat = 1
 
@@ -87,7 +92,8 @@ def cost(function, padding, gene, mutsum=0, mutsum2=0, functionmut=False, mutati
 
     elif function == 4:
         """
-        Look for sequentially correct numbers, add more (with exponent) every time it's correct
+        Look for sequentially correct numbers, add more (with exponent) 
+        every time it's correct
         """
         repeat = 1
         maxscore = 0
@@ -109,17 +115,19 @@ def cost(function, padding, gene, mutsum=0, mutsum2=0, functionmut=False, mutati
 
     elif function == 5:
         """
-        Cost is calculated by adding the difference between all neighbours in the
-        array to the power of 2, making numbers to be neighbouring numbers very
-        far away from them very unlikely
+        Cost is calculated by adding the difference 
+        between all neighbours in the
+        array to the power of 2
         """
+
         for i in range(0, len(genome) - 1):
             scoreseq += pow(abs(genome[i] - genome[i + 1]), 2)
 
 
     elif function == 6:
         """
-        Score calculated by counting the number of elements which are already sorted
+        Score calculated by counting the number of elements 
+        which are already sorted
         """
         repeat = 1
         maxscore = 0
@@ -137,14 +145,6 @@ def cost(function, padding, gene, mutsum=0, mutsum2=0, functionmut=False, mutati
 
         # converts score to priority
         scoreseq = maxscore / scoreseq
-
-    elif function == 7:
-        """
-        looks how far off the gene is from its final desired position. It's really bad
-        """
-
-        for i in range(1, len(genome)):
-            scoreseq += abs(genome[i] - i)
 
     if scoremut != 0:
         score = scoreseq + scoremut/2
