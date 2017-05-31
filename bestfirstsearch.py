@@ -117,8 +117,6 @@ def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=11, 
                     print("mutsum          {}".format(mutsumT[-1]))
                     print("mutsum2         {}".format(mutsum2T[-1]))
 
-                    # plotMutations(genesT, mutationTrackT, mut)
-
                     # Delete a part of the genome queue
                     stepbackcleanup(genes, level, 7)
                     prioritycleanup(genes, level)
