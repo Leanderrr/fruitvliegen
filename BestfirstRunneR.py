@@ -7,6 +7,7 @@ Leander
 """
 
 from bestfirstsearch import main as bestfirst
+from flipsorter import main as flipsort
 from random import shuffle
 import numpy
 
@@ -14,7 +15,7 @@ import numpy
 functionseq = 1
 functionmut = 3
 padding = True
-stop = 10
+stop = 15
 genelength = 25
 printer = False
 plotter = False
@@ -25,9 +26,11 @@ for gene in range(1, genelength+1):
 nruns = 100
 
 # The output variables
+genes = []
 mutsums = []
 mutsums2 = []
 levels = []
+fliplevels = []
 costs = []
 mutationTracks1 = []
 mutationTracks2 = []
@@ -38,10 +41,14 @@ times = []
 # Performing the runs with randomized genomes of requested length
 for i in range(0, nruns):
     shuffle(genome)
+    genes.append(genome)
     print("\nRun {}: genome to sequence: {}".format(i, genome))
 
     # Call bestfirst algorithm
     mutsum, mutsum2, level, cost, mutationTrack1, mutationTrack2, same, solutionN, time = bestfirst(genome, functionseq, functionmut, padding, stop, printer, plotter)
+
+
+    fliplevel = flipsort(genome, plotter, printer)
 
     # Saving output
     mutsums.append(mutsum)
@@ -53,18 +60,20 @@ for i in range(0, nruns):
     sames.append(same)
     solutionNs.append(solutionN)
     times.append(time)
+    fliplevels.append(fliplevel)
 
 # Printing results
-for i in range(0, nruns):
-    print("mutationtracker1: {}".format(mutationTrack1))
-    print("\nresults run {}: ".format(i))
-    print("minimum  mutsum:  {}".format(mutsums[i]))
-    print("minimum  mutsum2: {}".format(mutsums2[i]))
-    print("outcome with min mutsum is same outcome as min mutsum2 {}".format(sames[i]))
-    print("minimum levels:  {} deep".format(levels[i]))
-    print("minimum level found on average in solution: {}".format(solutionNs[i]))
-    print("start cost:{}".format(costs[i]))
-    print("runtime: {} sec".format(times[i]))
+print("\n\ngenomes = {};".format(genes))
+print("mutationtracker1 = {};".format(mutationTracks1))
+print("mutationtracker2 = {};".format(mutationTracks2))
+print("mutsums = {};".format(mutsums))
+print("mutsums2 = {};".format(mutsums2))
+print("sames = {};".format(sames))
+print("levels = {};".format(levels))
+print("fliplevels = {};".format(fliplevels))
+print("solat = {};".format(solutionNs))
+print("costs = {};".format(costs))
+print("runtimes = {};".format(times))
 
 
 

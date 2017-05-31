@@ -98,6 +98,8 @@ def main(geneOrigin = [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12,
         ax.axis([-0.05, len(genes[0]) / 4, -0.1, len(genes)])
         plt.show()
 
+    return len(flips)
+
 
 if __name__ == "__main__":
     main()

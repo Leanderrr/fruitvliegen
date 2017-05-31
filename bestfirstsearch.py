@@ -113,7 +113,7 @@ def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=11, 
 
                     print("sol {:<3}: level:  {}".format(solnum, level))
                     print("mutationtracker:{}".format(mutationTrackT))
-                    print("cost:           {}".format(costsT[-1]))
+                    # print("cost:           {}".format(costsT[-1]))
                     print("mutsum          {}".format(mutsumT[-1]))
                     print("mutsum2         {}".format(mutsum2T[-1]))
 
@@ -147,7 +147,7 @@ def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=11, 
             if len(genes) > 10000:
                 prioritycleanup(genes, prunelevel)
                 # print(len(genes))
-                if time.time() - tstart > 30:
+                if time.time() - tstart > 60:
                     Go = False
 
 
