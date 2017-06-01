@@ -20,7 +20,7 @@ def main(geneOrigin=[5, 2, 1, 4, 3], maxDepth=4, printer=True, plotter=True):
 
     # Create solution array
     solution = []
-    for i in range(1,geneLength+1):
+    for i in range(1, geneLength+1):
         solution.append(i)
 
     mutationTrack = [-1] # This keeps track of how many mutations have been tried for a child
@@ -71,8 +71,7 @@ def main(geneOrigin=[5, 2, 1, 4, 3], maxDepth=4, printer=True, plotter=True):
     tduration = time.time() - tstart
     print("{0:.3f}".format(tduration))
 
-
-    if printer == True:
+    if printer:
         print('number of genomes in archive: {}'.format(len(archive)))
         print('# of double found sequences:  {}'.format(doubleCounter))
 
@@ -81,10 +80,9 @@ def main(geneOrigin=[5, 2, 1, 4, 3], maxDepth=4, printer=True, plotter=True):
             print("{} {}".format(i, gene))
             i += 1
 
-
     print("final mutation tracker: {}".format(mutationTrack))
 
-    if plotter == True:
+    if plotter:
         plotMutations(genes, mutationTrack, mut)
 
 if __name__ == '__main__':
