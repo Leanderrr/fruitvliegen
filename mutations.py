@@ -1,6 +1,6 @@
 class mutationlist:
     """
-
+    Returns an object with information about what mutations can be done for a genome
     :param geneLength: The length of a gene to calculate all possible mutations for
     :return: An object with several lists:
         .start = a list of on which gene each mutation starts
