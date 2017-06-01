@@ -14,19 +14,15 @@ started: 2017-5-15
 """
 
 from mutations import mutationlist
-from breadthfirst import traceMutations
-from breadthfirst import prioritycleanup
-from breadthfirst import stepbackcleanup
-from heapq import *
+from helperFunctions import traceMutations
+from helperFunctions import prioritycleanup
+from helperFunctions import stepbackcleanup
 from plotters import plotMutations
+from heapq import *
 from cost import cost
 import time
-import random
 
-# given genome of D. miranda
-#[23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9]
-
-def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=1, printer = True, plotter = True):
+def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=5, printer = True, plotter = True):
     """
     :param geneOrigin: The sequence of genes to start with
     :param functionseq: The sequence cost function (select it with an integer)
@@ -38,12 +34,13 @@ def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=1, p
     :return:
     """
     if isinstance(geneOrigin, bool):
-        geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9]
+        # Genome of D. Miranda
+        geneOrigin = [6, 1, 2, 3, 5, 7, 4]
 
     prunelevel = len(geneOrigin)
     mutsummax = 200 # Sum of mutation lengths max, if exceeded, genes get pruned
 
-    # Create solution array
+    # Create solution genome array
     geneLength = len(geneOrigin)
     solution = []
     for i in range(1, geneLength + 1):
@@ -53,26 +50,24 @@ def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=1, p
     mut = mutationlist(geneLength)
 
     # Create genome queue and fill in the starting gene
+    level = 0
+    solnum = 0  # 0 solutions as of yet
     genes = []
     priority, __, __ = cost(functionseq, padding, geneOrigin)
-    level = 0
     heappush(genes, (priority, geneOrigin, level))
 
-    # Best First Search
     archive = dict()
-    solnum = 0
     key = ".".join(str(x) for x in geneOrigin)
 
     priority, __, __ = cost(functionseq, padding, geneOrigin)
-    # 1st value: deth level, 2nd: last mutation, 3th: priority, 4th: sum of mutations
-    archive[key] = [level, 0, priority, 0,0]
+    # 1st value: depth level, 2nd: last mutation, 3th: priority, 4th: sum of mutations
+    archive[key] = [level, 0, priority, 0, 0]
     Go = True
     doubleCounter = 0
     tstart = time.time()
 
-    while (not len(genes)==0) and (Go == True):
-
-        # Make all possible children and save them
+    # Run search!
+    while genes and Go:
         priority, mother, level = heappop(genes)
         motherkey = ".".join(str(x) for x in mother)
 
@@ -80,21 +75,25 @@ def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=1, p
         mutsum = archive[motherkey][3]
 
         if level > prunelevel or mutsum >= mutsummax :
+            # pop and go to next genome if this one is getting too long or deep
             heappop(genes)
 
         else:
-            # mutate the child - add to queue if not already in archive nor solution of the problem
+            # Make all possible children and save them
             for i in range(0, mut.max):
                 child = mother[:]
                 mutsum = archive[motherkey][3]
                 mutsum2 = archive[motherkey][4]
+
+                # mutation i for this child
                 child[mut.start[i]:mut.end[i]] = child[mut.start[i]:mut.end[i]][::-1]
                 key = ".".join(str(x) for x in child)
 
                 # check if child is the solution
                 if child == solution:
-                    priority, mutsum, mutsum2 = cost(functionseq, padding, child, mutsum,
-                                                mutsum2, functionmut, i, mut, level)
+                    priority, mutsum, mutsum2 = cost(functionseq, padding, child,
+                                                     mutsum, mutsum2, functionmut,
+                                                     i, mut, level)
 
                     # Remember which solution this was in the library
                     key = ".".join((key, str(solnum)))

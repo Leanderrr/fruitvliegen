@@ -8,8 +8,8 @@ Nina
 started: 2017-5-2
 """
 from mutations import mutationlist
-from depthfirst import new_branch
-from depthfirst import plotMutations
+from helperFunctions import new_branch
+from plotters import plotMutations
 import time
 
 def main(geneOrigin = [5, 2, 7, 6, 8, 1, 4, 3, 9], maxDepth = 3, printer = True, plotter = True):
