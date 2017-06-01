@@ -3,6 +3,12 @@ Helper functions for the breadth first algorithm
 Leander
 Nina
 
+Functions:
+-stepbackcleanup
+-prioritycleanup
+-traceMutations
+-
+
 2017-5-16
 """
 import numpy as np

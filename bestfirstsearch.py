@@ -18,7 +18,7 @@ from breadthfirst import traceMutations
 from breadthfirst import prioritycleanup
 from breadthfirst import stepbackcleanup
 from heapq import *
-from depthfirst import plotMutations
+from plotters import plotMutations
 from cost import cost
 import time
 import random
@@ -26,7 +26,7 @@ import random
 # given genome of D. miranda
 #[23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9]
 
-def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=11, printer = True, plotter = True):
+def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=1, printer = True, plotter = True):
     """
     :param geneOrigin: The sequence of genes to start with
     :param functionseq: The sequence cost function (select it with an integer)
