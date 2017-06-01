@@ -21,9 +21,15 @@ def cost(function, padding, gene, mutsum=0, mutsum2=0, functionmut=False,
 
     # Call cost function for the mutation
     if mut != False:
-        scoremut, mutsum, mutsum2 = mutationcost(functionmut,mutsum, mutsum2,
-                                                 mut,mutation, level)
+        mutsum += mut.length[mutation]
+        if functionmut != 0:
+            scoremut, mutsum, mutsum2 = mutationcost(functionmut,mutsum, mutsum2,
+                                                     mut,mutation, level)
 
+        else:
+            scoremut = 0
+
+        mutsum2 += 1 / 2 * pow(mut.length[mutation], 2)
     else:
         scoremut = 0
 
@@ -61,8 +67,6 @@ def mutationcost(functionmut, mutsum, mutsum2, mut, mutation, level):
     :return: mutsum: mutationpoints as n
     :return: mutsum2: mutationpoints as 0.5*n^2
     """
-    mutsum += mut.length[mutation]
-
     if functionmut == 1:
         scoremut = mutsum/20
 
@@ -87,8 +91,6 @@ def mutationcost(functionmut, mutsum, mutsum2, mut, mutation, level):
 
     elif functionmut == 5:
         scoremut = level/10
-
-    mutsum2 += 1 / 2 * pow(mut.length[mutation], 2)
 
     return scoremut, mutsum, mutsum2
 

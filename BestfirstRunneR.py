@@ -42,8 +42,9 @@ times = []
 
 # Performing the runs with randomized genomes of requested length
 for i in range(0, nruns):
-    print("\nRun {}: genome to sequence: {}".format(i, genomes[i]))
-    genome = genomes[i][:]
+    print("\nRun {}: genome to sequence: {}".format(i, genome))
+    shuffle(genome)
+    genes.append(genome)
     # Call bestfirst algorithm
     mutsum, mutsum2, level, cost, mutationTrack1, mutationTrack2, same, solutionN, time = bestfirst(genome, functionseq, functionmut, padding, stop, printer, plotter)
 

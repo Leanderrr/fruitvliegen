@@ -1,14 +1,15 @@
 """
 Best First Search that explores the state space
 
-Includes an archive 
-Queue is ordered based on costfunction in cost.py
-Stops at the stop level 
-Throws away half of the queue
-Output in graph -> the darker the shade of the flip line, the longer the mutation
+Includes an archive
+Queue is ordered based on costfunctions in cost.py
+Stops at the stop level
+stops after stoptime seconds
+Throws away half of the queue, per level
+graphical Output provided by the plotters functions :)
 
-Leander
-Nina
+Leander de Kraker
+Nina Cialdella
 
 started: 2017-5-15
 """
@@ -22,7 +23,7 @@ from heapq import *
 from cost import cost
 import time
 
-def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=5, printer = True, plotter = True):
+def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=1, printer = True, plotter = True):
     """
     :param geneOrigin: The sequence of genes to start with
     :param functionseq: The sequence cost function (select it with an integer)
@@ -35,10 +36,11 @@ def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=5, p
     """
     if isinstance(geneOrigin, bool):
         # Genome of D. Miranda
-        geneOrigin = [6, 1, 2, 3, 5, 7, 4]
+        geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9]
 
     prunelevel = len(geneOrigin)
-    mutsummax = 200 # Sum of mutation lengths max, if exceeded, genes get pruned
+    mutsummax = 200  # Sum of mutation lengths max, if exceeded, genes get pruned
+    stoptime = 60   # Stop searching after this many seconds
 
     # Create solution genome array
     geneLength = len(geneOrigin)
@@ -129,7 +131,7 @@ def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=5, p
                 elif (archive.get(key, False) != False) and (archive.get(key, 100)[0] <= level):
                     doubleCounter += 1
 
-                # child is not the solution nor in archive - so should be added to the end of the queue and archive
+                # child is not the solution nor in archive - so should be added to the queue and archive
                 else:
                     priority, mutsum, mutsum2 = cost(functionseq, padding, child, mutsum,
                                                      mutsum2, functionmut, i, mut, level)
@@ -137,10 +139,10 @@ def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=5, p
                     archive[key] = [level, i, priority, mutsum, mutsum2]
 
             # Pruning that keeps low levels
-            if len(genes) > 10000:
+            if len(genes) > 100000:
                 prioritycleanup(genes, prunelevel)
                 # Stop searching solutions after 2 minutes
-                if time.time() - tstart > 120:
+                if time.time() - tstart > stoptime:
                     Go = False
 
 
@@ -151,9 +153,9 @@ def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=5, p
         print('number of genomes in archive: {}'.format(len(archive)))
         print('# of double found sequences:  {}'.format(doubleCounter))
 
-    minmutsum = 1000
-    minmutsum2 = 1000
-    minlevel = 100
+    minmutsum = 99999
+    minmutsum2 = 99999
+    minlevel = 999999
 
     # Retrace which mutations were done to get the solutions
     for i in range(0, solnum):
