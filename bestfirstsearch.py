@@ -23,7 +23,7 @@ from heapq import *
 from cost import cost
 import time
 
-def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=1, printer = True, plotter = True):
+def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=10, printer = True, plotter = True):
     """
     :param geneOrigin: The sequence of genes to start with
     :param functionseq: The sequence cost function (select it with an integer)

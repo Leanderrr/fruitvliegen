@@ -69,10 +69,8 @@ def prioritycleanup(genes, sollevel):
             # The added linearity favors low depth, keeping their best forever
             # -0.01*depth + 0.125 causes the first halve of 25genomes to be cut
             # above the average score, and the deeper halve below average
-            meani = np.mean(allPriorities[i]) - 0.00 * i + 0.00
-            print(len(allPriorities[i]))
+            meani = np.mean(allPriorities[i]) - 0.01 * i + 0.125
             meanPriorities.append(meani)
-    print('\n\n\n\n\n\n')
     # Killing all above average priority genomes
     i = len(genes)-1
     while i >= 0:
