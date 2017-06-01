@@ -113,7 +113,6 @@ def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=11, 
 
                     print("sol {:<3}: level:  {}".format(solnum, level))
                     print("mutationtracker:{}".format(mutationTrackT))
-                    # print("cost:           {}".format(costsT[-1]))
                     print("mutsum          {}".format(mutsumT[-1]))
                     print("mutsum2         {}".format(mutsum2T[-1]))
 

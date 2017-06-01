@@ -15,7 +15,7 @@ import numpy
 functionseq = 1
 functionmut = 3
 padding = True
-stop = 100
+stop = 1
 genelength = 25
 printer = False
 plotter = False
@@ -23,7 +23,7 @@ genome = []
 for gene in range(1, genelength+1):
     genome.append(gene)
 
-nruns = 100
+nruns = 10
 
 # The output variables
 genes = []
