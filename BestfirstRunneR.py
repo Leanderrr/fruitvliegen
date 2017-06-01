@@ -23,7 +23,7 @@ genome = []
 for gene in range(1, genelength+1):
     genome.append(gene)
 
-nruns = 10
+nruns = 100
 
 # The output variables
 genes = []
@@ -31,6 +31,8 @@ mutsums = []
 mutsums2 = []
 levels = []
 fliplevels = []
+flipmutsums = []
+flipmutsums2 = []
 costs = []
 mutationTracks1 = []
 mutationTracks2 = []
@@ -40,21 +42,20 @@ times = []
 
 # Performing the runs with randomized genomes of requested length
 for i in range(0, nruns):
-    shuffle(genome)
-    genes.append(genome)
-    print("\nRun {}: genome to sequence: {}".format(i, genome))
-
+    print("\nRun {}: genome to sequence: {}".format(i, genomes[i]))
+    genome = genomes[i][:]
     # Call bestfirst algorithm
     mutsum, mutsum2, level, cost, mutationTrack1, mutationTrack2, same, solutionN, time = bestfirst(genome, functionseq, functionmut, padding, stop, printer, plotter)
 
-
-    fliplevel = flipsort(genome, plotter, printer)
+    fliplevel, flipmutsum, flipmutsum2 = flipsort(genome, plotter, printer)
 
     # Saving output
     mutsums.append(mutsum)
     mutsums2.append(mutsum2)
     levels.append(level)
     costs.append(cost)
+    flipmutsums.append(flipmutsum)
+    flipmutsums2.append(flipmutsum2)
     mutationTracks1.append(mutationTrack1)
     mutationTracks2.append(mutationTrack2)
     sames.append(same)
@@ -71,6 +72,8 @@ print("mutsums2 = {};".format(mutsums2))
 print("sames = {};".format(sames))
 print("levels = {};".format(levels))
 print("fliplevels = {};".format(fliplevels))
+print("flipmutsum = {};".format(flipmutsums))
+print("flipmutsum2 = {};".format(flipmutsums2))
 print("solat = {};".format(solutionNs))
 print("costs = {};".format(costs))
 print("runtimes = {};".format(times))

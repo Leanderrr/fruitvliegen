@@ -3,10 +3,15 @@ Helper functions for the breadth first algorithm
 Leander
 Nina
 
+Functions:
+-stepbackcleanup
+-prioritycleanup
+-traceMutations
+-
+
 2017-5-16
 """
 import numpy as np
-import time
 
 def stepbackcleanup(genes, sollevel, throw):
     """
@@ -127,9 +132,6 @@ def traceMutations(archive, mut, genelen, geneOrigin, solution):
         # Retrace the gene created by this mutation and use it as new key
         gene[mut.start[mutation]:mut.end[mutation]] = gene[mut.start[mutation]:mut.end[mutation]][::-1]
         key = ".".join(str(x) for x in gene)
-        # print("key: {}".format(key))
-        # print("mutation: {}".format(mutation))
-        # print("level: {}".format(level))
 
 
         if key == geneOrigin:
