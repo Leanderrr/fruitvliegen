@@ -12,6 +12,9 @@ from numpy import linspace
 import time
 
 def main(geneOrigin = [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12, 5, 6, 17, 20], plot = True, printer = True):
+    mutsum = 0
+    mutsum2 = 0
+
     gene = geneOrigin
     genes = []
     solution = range(1, len(gene)+1) # Genome of Miranda
@@ -31,11 +34,13 @@ def main(geneOrigin = [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12,
 
             if printer == True:
                 print("{0:<3}{1}".format(i, gene))
+
+            # FLIP
             genes.append(gene[:])
             gene[flip[0]:flip[1]] = gene[flip[0]:flip[1]][::-1]
 
-            #flip[1] = flip[1]-flip[0] # Calculate length of flip
-            cumlength += flip[1]
+            mutsum += flip[1] - flip[0]
+            mutsum2 += 0.5 * pow((flip[1]-flip[0]), 2)
             flips.append(flip)
 
     # Printing showing mutations
@@ -47,7 +52,6 @@ def main(geneOrigin = [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12,
         for i in range(len(flips)):
             print("{0:<4}: {1:<9}: {2:<4}".format((i+1),flips[i][0],flips[i][1]))
 
-        # print("\nCumulative length of flips: {}".format(cumlength))
         print("Number of mutations:  {}".format(len(flips)))
 
     tduration = time.time() - tstart
@@ -65,7 +69,6 @@ def main(geneOrigin = [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12,
         y = 0
         for genome in genes:
             # Print genome text in figure
-            # score = costfunction.main(genome)
             x = 0
             for gen in genome:
                 ax.text(x, y, '{}, '.format(gen))
@@ -98,7 +101,7 @@ def main(geneOrigin = [16,2,9,25,8,24,14,21,11,10,3,4,13,22,23,19,15,18,7,1, 12,
         ax.axis([-0.05, len(genes[0]) / 4, -0.1, len(genes)])
         plt.show()
 
-    return len(flips)
+    return len(flips), mutsum, mutsum2
 
 
 if __name__ == "__main__":

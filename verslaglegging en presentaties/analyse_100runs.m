@@ -28,6 +28,8 @@ fprintf('number of runs done = %d\n', nruns)
 % Taking the average of all values that need averaging
 aver.levels = mean(levels);
 aver.fliplevels = mean(fliplevels);
+aver.flipmutsum = mean(flipmutsum);
+aver.flipmutsum2 = mean(flipmutsum2);
 aver.mutsums = mean(mutsums);
 aver.mutsums2 = mean(mutsums2);
 aver.solat = mean(solat);
@@ -38,6 +40,8 @@ aver.sames = mean(sames);
 % Taking Standard Deviations from all variables that need SDing
 STD.levels = std(levels);
 STD.fliplevels = std(fliplevels);
+STD.flipmutsum = std(flipmutsum);
+STD.flipmutsum2 = std(flipmutsum2);
 STD.mutsums = std(mutsums);
 STD.mutsums2 = std(mutsums2);
 STD.solat = std(solat);
@@ -49,7 +53,7 @@ STD.sames = std(sames);
 better = 0;
 omg = [];
 for i = 1:nruns
-    if levels(i) <= fliplevels(i)
+    if levels(i) < fliplevels(i)
         better = better + 1;
     else
         omg(end + 1) = i;
@@ -63,10 +67,19 @@ if better == 1
     fprintf('\nthe bestfirst always found a shorter solution than flipsorter!\n')
 end
 
+omg
+mean(mutsums(omg))
+mean(flipmutsum(omg))
+
+mean(mutsums2(omg))
+mean(flipmutsum2(omg))
+
+aver
+STD
 %% New cost measures to see what makes a genome difficult
 
 difficulty = zeros(1, nruns);
-method = 'positiondist'; % 'positiondist'
+method = 'correct'; % 'positiondist' or 'correct'
 for i = 1:nruns
     genome = [0, genomes(i, :), (length(genomes(i,:))+1)]; % Add padding
     if strcmp(method, 'positiondist')
@@ -98,29 +111,29 @@ fit.Rsquared.Ordinary
 close all
 % Relation between best solution level and starting cost
 figure
-randX = (rand(1, nruns) - 0.5)/5;
-randY = (rand(1, nruns) - 0.5)/5;
+randX = (randn(1, nruns) - 0.5)/20;
+randY = (randn(1, nruns) - 0.5)/20;
 % randX = 0;
 % randY = 0;
-plot(costs+rand(1,1)+randX, levels+randY, 'o')
-xlabel('begin costs')
+plot(costs+randX, levels+randY, 'o')
+xlabel('coster after 1st mutation')
 ylabel('solution found at level')
-title('relation between beginning cost and solution depth level')
+title('relation between cost after 1 step and solution depth level')
 
 
 figure
-randX = (rand(1, nruns) - 0.5)/2;
-randY = (rand(1, nruns) - 0.5)/2;
+randX = (randn(1, nruns) - 0.5)/20;
+randY = (randn(1, nruns) - 0.5)/20;
 % randX = 0;
 % randY = 0;
 plot(difficulty+randX, levels+randY, 'or')
 xlabel('begin costs')
 ylabel('solution found at level')
-title('relation between beginning cost and solution depth level')
+title('relation between beginning difficulty and solution depth level')
 %% 
 figure
-randX = (rand(1, nruns) - 0.5)/3;
-randY = (rand(1, nruns) - 0.5)/3;
+randX = (rand(1, nruns) - 0.5)/5;
+randY = (rand(1, nruns) - 0.5)/5;
 % randX = 0;
 % randY = 0;
 plot(difficulty+randX, mutsums+randY, 'og')
@@ -128,10 +141,10 @@ xlabel('starting cost')
 ylabel('n')
 title('relation between beginning cost and mutation points')
 
-%% 
+%
 figure
-randX = (rand(1, nruns) - 0.5)/3;
-randY = (rand(1, nruns) - 0.5)/3;
+randX = (rand(1, nruns) - 0.5)/5;
+randY = (rand(1, nruns) - 0.5)/5;
 plot(difficulty+randX, mutsums2+randY, 'ob')
 xlabel('starting cost')
 ylabel('1/2 n ^2')
@@ -150,3 +163,22 @@ xlim([0.5,2.5])
 xticklabels({'bestfirst', 'flipsort'})
 title('flipsorter vs bestfirst')
 ylabel('depth level solution')
+
+%% Reprint genome sequences in python format
+clc
+fprintf('\n\ngenomes = [')
+for i = 1:100
+    fprintf('[')
+    for j = 1:length(genomes(i,:))
+        fprintf('%d', genomes(i,j))
+        if j<length(genomes(i,:))
+            fprintf(',')
+        end
+    end
+    if i<100
+        fprintf('],')
+    else
+        fprintf(']')
+    end
+end
+fprintf(']\n\n')
