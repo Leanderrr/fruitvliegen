@@ -39,7 +39,6 @@ def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=11, 
     """
     if isinstance(geneOrigin, bool):
         geneOrigin = [23, 1, 2, 11, 24, 22, 19, 6, 10, 7, 25, 20, 5, 8, 18, 12, 13, 14, 15, 16, 17, 21, 3, 4, 9]
-        # random.shuffle(geneOrigin)
 
     prunelevel = len(geneOrigin)
     mutsummax = 200 # Sum of mutation lengths max, if exceeded, genes get pruned
@@ -75,7 +74,6 @@ def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=11, 
 
         # Make all possible children and save them
         priority, mother, level = heappop(genes)
-        #print("mother = {}".format(mother))
         motherkey = ".".join(str(x) for x in mother)
 
         level += 1
@@ -130,7 +128,6 @@ def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=11, 
 
                 # check if child is already in the archive - if so don't add this child to the queue
                 elif (archive.get(key, False) != False) and (archive.get(key, 100)[0] <= level):
-                    # print("earlier level {}, current level {}".format((archive.get(key, False)[0]), level))
                     doubleCounter += 1
 
                 # child is not the solution nor in archive - so should be added to the end of the queue and archive
@@ -143,19 +140,9 @@ def main(geneOrigin=False, functionseq=1, functionmut=3, padding=True, stop=11, 
             # Pruning that keeps low levels
             if len(genes) > 10000:
                 prioritycleanup(genes, prunelevel)
-                # print(len(genes))
-                if time.time() - tstart > 60:
+                # Stop searching solutions after 2 minutes
+                if time.time() - tstart > 120:
                     Go = False
-
-
-            # Pruning that throws away low levels, and thus cannot dramatically change its route after some time
-            # Remove a part of the queue
-            # cutat = 10000 # Cut at x many genes
-            # if len(genes)>cutat:
-            #     cut = len(genes)-cutat
-            #     del genes[-cut::]
-            #
-            # heapify(genes)
 
 
     tduration = time.time() - tstart
