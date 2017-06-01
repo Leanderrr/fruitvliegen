@@ -9,11 +9,11 @@ started: 2017-5-2
 """
 from mutations import mutationlist
 from depthfirst import new_branch
-from depthfirst import plotMutations
+from plotters import plotMutations
 import time
 
 
-def main(geneOrigin=[5, 2, 1, 4, 3], maxDepth=2, printer=True, plotter=True):
+def main(geneOrigin=[5, 2, 1, 4, 3], maxDepth=5, printer=True, plotter=True):
     geneLength = len(geneOrigin)
     genes = []
     genes.append(geneOrigin)
